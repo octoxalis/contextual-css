@@ -1,0 +1,14 @@
+{
+  "name": "contextual_css",
+  "version": "1.0.0",
+  "description": "A semantic HTML driven Node JS script to create modular cascading stylesheets",
+  "main": "contextual_css.js",
+  "dependencies": {
+    "fs-extra": "^9.1.0"
+  },
+  "keywords": [
+    "CSS, HTML, Node JS"
+  ],
+  "author": "octoxalis",
+  "license": "MIT"
+}
