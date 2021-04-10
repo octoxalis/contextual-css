@@ -1,7 +1,7 @@
 const FS_o  = require( 'fs-extra' )
 
 const CONTEXTUAL_INPUT_s =
-  'html_body.html'
+  'body.context.html'
 
 const CONTEXTUAL_OUTPUT_s =
   './'
@@ -1049,7 +1049,7 @@ void function
     process
       .argv
         .slice( 2 )
-          [0]      //: input file (HTML)
+          [0]      //: input file (*.context.html)
     ||
     CONTEXTUAL_INPUT_s
 
@@ -1058,7 +1058,7 @@ void function
       process
         .argv
           .slice( 2 )
-            [1]    //: output file (CSS) directory
+            [1]    //: output file (*.css) directory
       ||
       CONTEXTUAL_OUTPUT_s
 
