@@ -3,13 +3,13 @@ font-size: 16px;
 background: hsla(210 50% 28%/1);
 }
 
-.amazing {
+.paragraph {
 display: grid;
 margin: 2em 0;
 color: hsla(160 50% 94%/1);
 }
 
-.amazing > i {
+.paragraph > i {
 font-style: normal;
 font-size: 150%;
 }
