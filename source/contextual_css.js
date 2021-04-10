@@ -1,7 +1,7 @@
 const FS_o  = require( 'fs-extra' )
 
 const CONTEXTUAL_INPUT_s =
-  'body.context.html'
+  'html.context.html'
 
 const CONTEXTUAL_OUTPUT_s =
   './'
@@ -663,6 +663,8 @@ const CSS_o =
     line_s
   ) =>
   {
+    ;console.table( CSS_o.tagStack_a )
+    
     CSS_o
       .takeUp__v()
 
@@ -676,6 +678,7 @@ const CSS_o =
     let endStack_o =
       CSS_o
         .endStack__o()
+
 
     if
     (

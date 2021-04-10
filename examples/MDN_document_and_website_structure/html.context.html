@@ -1,0 +1,138 @@
+<html>
+        font-size: 10px;
+        background-color: #a9a9a9;
+  <body>
+  context( stack, ignore )
+          margin: 0;
+          padding: 0;
+          width: 70%;
+          margin: 0 auto;
+    <header><!-- Here is our main header that is used across all the pages of our website -->
+        <h1>
+              font-family: 'Sonsie One', cursive;
+              color: #2a2a2a;
+              font-size: 4rem;
+              text-align: center;
+              color: white;
+              text-shadow: 2px 2px 10px black;
+      </h1>
+    </header>
+    context( stack, new )
+    <nav>
+            background-color: white;
+            padding: 1%;
+            height: 50px;
+            background-color: #ff80ff;
+            display: flex;
+            margin-bottom: 10px;
+      <ul>
+              padding: 0;
+              list-style-type: none;
+              flex: 2;
+              display: flex;
+        <li>
+                font-family: 'Open Sans Condensed', sans-serif;
+                color: #2a2a2a;
+                font-size: 1.6rem;
+                line-height: 1.5;
+                display: inline;
+                text-align: center;
+                flex: 1;
+          <a>
+                  display: inline-block;
+                  font-size: 2rem;
+                  text-transform: uppercase;
+                  text-decoration: none;
+                  color: black;
+          </a>
+        </li><!-- + -->
+      </ul>
+      <form><!-- A Search form is another common non-linear way to navigate through a website. -->
+              flex: 1;
+              display: flex;
+              align-items: center;
+              height: 100%;
+              padding: 0 2em;
+        <input/>
+                font-family: 'Open Sans Condensed', sans-serif;
+                color: #2a2a2a;
+                font-size: 1.6rem;
+                height: 32px;
+        <input[type="search"]/>
+                flex: 3;
+        <input[type="submit"]/>
+                flex: 1;
+                margin-left: 1rem;
+                background: #333;
+                border: 0;
+                color: white;
+      </form>
+    </nav>
+    context( stack, ignore )
+    <main><!-- Here is our page's main content -->
+            display: flex;
+      <article><!-- It contains an article -->
+              background-color: white;
+              padding: 1%;
+              flex: 4;
+        <h2>
+                font-family: 'Sonsie One', cursive;
+                color: #2a2a2a;
+                font-size: 3rem;
+                text-align: center;
+        </h2>
+        <p>
+                font-family: 'Open Sans Condensed', sans-serif;
+                color: #2a2a2a;
+                font-size: 1.6rem;
+                line-height: 1.5;
+        </p><!-- + -->
+        <h3>
+                font-family: 'Sonsie One', cursive;
+                color: #2a2a2a;
+                font-size: 2.2rem;
+        </h3><!-- + -->
+      </article>
+      <aside><!-- the aside content can also be nested within the main content -->
+              background-color: white;
+              padding: 1%;
+              flex: 1;
+              margin-left: 10px;
+              background-color: #ff80ff;
+        <h2>
+        <!--
+                font-family: 'Sonsie One', cursive;
+                color: #2a2a2a;
+                font-size: 3rem;
+                text-align: center;
+        -->
+        </h2>
+        context( stack, keep )
+        <ul>
+          <li>
+                  font-family: 'Open Sans Condensed', sans-serif;
+                  color: #2a2a2a;
+                  padding-bottom: 10px;
+                  font-size: 1.6rem;
+                  line-height: 1.5;
+            <a>
+            </a>
+          </li><!-- + -->
+        </ul>
+      </aside>
+    </main>
+    <footer><!-- And here is our main footer that is used across all the pages of our website -->
+            background-color: white;
+            padding: 1%;
+            margin-top: 10px;
+      <p>
+              <!--
+              font-family: 'Open Sans Condensed', sans-serif;
+              color: #2a2a2a;
+              font-size: 1.6rem;
+              line-height: 1.5;
+              -->
+      </p>
+    </footer>
+  </body>
+</html>

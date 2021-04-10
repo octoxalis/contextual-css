@@ -14,3 +14,5 @@ Semantic HTML driven Node JS script to create modular stylesheets:
 +  Insert the CSS declaration(s) relative to each tag
 +  Save the file as an HTML file (.html extension)
 +  Run the Node JS script to generate a CSS file (.css extension)
+
+NB: If you use a class for a tag, you have to put the class attribute/value pair in the closing tag (this is a known issue).
