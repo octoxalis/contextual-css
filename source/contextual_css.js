@@ -622,8 +622,13 @@ const CSS_o =
         'minify'    //: minify output
       :
       {
+        console.log( arg_s )
         CSS_o
-          .minify_b = true
+          .minify_b =
+          arg_s
+            .toLowerCase()
+          ===
+          'true'
  
         return
       }
