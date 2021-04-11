@@ -1,5 +1,6 @@
 .select {
-max-width: fit-content;
+width: fit-content;
+max-width: 50ch;
 margin: 0 auto;
 cursor: pointer;
 }
