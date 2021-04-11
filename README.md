@@ -16,7 +16,64 @@ Semantic HTML driven Node JS script to create modular stylesheets:
 +  Run the Node JS script to generate a CSS file (.css extension)
 
 
+## Motivation
+
+There are many, many ways to structure Cascadind stylesheets, but the most obvious solutions are not always the ones that are most practiced.
+
+Contextual-CSS is one of these solutions at our fingertips: it simply uses the hierarchical structure of the HTML code to setup the rulesets declarations of the stylesheets we want to create.<br/>
+With the help of a few directives to parameterize the processing, using a `context` function, a one Node JS command yied a fully functional set of stylesheets, broken in as many components as required by the CSS designer of the whole HTML structure of a Web page.
+
+
+## Tags and declarations
+
+The skeleton of a Contextual-CSS file is a replica of the its associated HTML page or fragment: tags only that are filled with the related CSS declarations.
+
+But tags are not enougth to have all the nuances of a stylesheet that are desired. Some declarations are related to a specific state of a DOM node and its tag have to reflect this state.<br/>
+Therefore tags can not only be tags but also selectors:
+```html
+<aside>
+  <a>
+        display: none;
+  </a>
+  <a:target>
+        max-width: 50%;
+        display: grid;
+        justify-items: center;
+        margin: 25vh auto;
+        padding: 1rem;
+        color: hsla(var(--hue_color) 50% 94%/1);
+        font-size: 125%;
+  </a>
+</aside>
+```
+
+Most usual kinds of CSS selectors can be added to any tag: they have to follow the usual CSS selector syntax:
+```html
+<input[id^="I"]:checked/>
+<label[for^="I"]:hover>
+</label>
+```
+
+__Important__: **Self-closing tags have to be closed!**
+
+
+## Sibling selectors
+
+To specify a general or adjacent sibling relation between to consecutive tags at the same nesting level either a general selector (`~`) or adjacent selector (`+`) have to be inserted on a single line of its own between the two tags:
+```html
+<input/>
++
+<label:hover>
+        filter: brightness(1.5);
+</label>
+```
+
+
+
 ## The context function
+
+There is only one processing function (at the moment) to organize the output of a Contextual-CSS file, whose name is: `context`!<br/>
+It takes two arguments: a __name__ and a __parameter__.
 
 
 ### **url**
@@ -25,7 +82,7 @@ Semantic HTML driven Node JS script to create modular stylesheets:
 
 #### `context( url, relative_url )`
 
-The file named by the argument `relative_url` will be put on the proceed stack to be processed after the current one.<br/>
+The file named by the parameter `relative_url` will be put on the proceed stack to be processed after the current one.<br/>
 This a useful function to be able to generate modular stylesheets.
 
 
@@ -59,10 +116,11 @@ This function modify the stack as follow:
 <hr/>
 
 
-#### `context( copy )`
+#### `context( copy, next )`
 
 Nesting this function in any tag will group it with the following one.<br>
 It can be used for different tags with identical declarations (for instance in a definition list).
+The parameter `next` is optional.
 
 
 ### **minify**
@@ -80,7 +138,14 @@ not minified if it's `false` (or `FALSE`).
 Contextual-CSS has been designed primarily a classless stylesheet utility: selectors are driven by the HTML hierarchy.
 
 However, sometimes defining classes can be helpful and it can been done the following way:<br/>
-+  to declare any tag as a class, add the usual attribute/value pair `class="className"` in the opening __and   closing tag__ (Contextual-CSS has not to be a valid HTML file).
++  to declare any tag as a class, add the usual attribute/value pair `class="className"` in the opening __and closing__ tags (Contextual-CSS has not to be a valid HTML file).
+
+
+## File format
+
+By convention, the Contextual-CSS file have a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar, see lower). After processing, this extension is replaced by the usual `.css` one.
+
+By convention, an 8-spaces indentation is used between the opening tag and its declarations, as to improve code reading.
 
 
 ## Examples

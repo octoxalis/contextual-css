@@ -10,10 +10,10 @@ context( stack, ignore )
     <main>
     context( stack, new )
       <p class="paragraph">
-          display: grid;
-          justify-items: center;
-          margin: 2em 0;
-          color: hsla(calc(var(--hue_color) - 50) 50% 94%/1);  /* TODO: 50 as a var */
+              display: grid;
+              justify-items: center;
+              margin: 2em 0;
+              color: hsla(calc(var(--hue_color) - 50) 50% 94%/1);  /* TODO: 50 as a var */
         <i>
                 font-style: normal;
                 font-size: 150%;
@@ -34,17 +34,7 @@ context( stack, ignore )
               font-size: 125%;
         </a>
       </aside>
-      <footer>
-              position: absolute;
-              bottom: 0;
-              width: 99vw;
-              margin: 1rem auto;
-              display: grid;
-              justify-items: center;
-              color: hsla(var(--hue_color) 50% 94%/1);
-              font-size: 80%;
-              font-weight: 200;
-      </footer>
+      context( url, footer.context.html )
     </main>
   </body>
 </html>
