@@ -1,0 +1,47 @@
+context( keepCSSComment )
+<div class="select">
+        max-width: fit-content;
+        margin: 0 auto;
+        cursor: pointer;
+  <button>
+          width: 100%;
+          padding: .5em 2em;
+          color: hsla(var(--hue_color) 50% 94%/1);
+          background: hsla(var(--hue_color) 50% 17%/1);
+          border: 2px solid hsla(var(--hue_color) 50% 94%/1);
+  </button>
+  +
+  <div>
+          max-height: 0;
+          overflow: hidden;
+          background: hsla(var(--hue_color) 50% 6%/1);
+          transition: .3s;
+    <input/>
+            display: none;
+    <label><!-- repeat -->
+            display: block;
+            padding: .5em;
+            background: hsla(var(--hue_color) 50% 61%/1);
+      <a>
+        color: hsla(var(--hue_color) 50% 94%/1);
+      </a>
+    </label>
+    <input/><!-- else -->
+    +
+    <label:hover><!-- repeat -->
+            filter: brightness(1.5);
+    </label>
+    <input:checked/><!-- else -->
+    +
+    <label><!-- repeat -->
+            background: hsla(var(--hue_color) 50% 6%/1);
+            color: hsla(var(--hue_color) 50% 94%/1);
+    </label>
+  </div>
+  <button:focus><!-- else -->
+  </button>
+  ~
+  <div>
+          max-height: 100vh;    /* can take up all vertical space */
+  </div>
+</div class="select"><!-- closing tag -->

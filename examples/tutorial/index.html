@@ -4,29 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CONTEXTUAL CSS: select example</title>
-    <link rel="stylesheet" href="html.context.css">
+    <link rel="stylesheet" href="html.css">
+    <link rel="stylesheet" href="select.css">
+    
   </head>
   <body class="body">
-    <p class="paragraph">
-      Experience the power of HTML/CSS without JavaScript:
-      <i>It's amazing!</i>
-    </p>
-    <div class="select">
-      <button>click</button>
-      <div>
-        <input type="radio" id="one" name="select" />
-        <label for="one">
-          primo
-        </label>
-        <input type="radio" id="two" name="select" />
-        <label for="two">
-          secondo
-        </label>
-        <input type="radio" id="three" name="select" />
-        <label for="three">
-          tertio
-        </label>
+    <main>
+      <p class="paragraph">
+        Experience the power of HTML & CSS
+        <i>It's amazing!</i>
+      </p>
+      <div class="select">
+        <button>Do you like it&nbsp;?</button>
+        <div>
+          <input type="radio" id="one" name="select" />
+          <label for="one">
+            HTML is awesome
+          </label>
+          <input type="radio" id="two" name="select" />
+          <label for="two">
+            I like CSS
+          </label>
+          <input type="radio" id="three" name="select" />
+          <label for="three">
+            <a href="#github">
+              I have to try Contextual CSS
+            </a>
+          </label>
+        </div>
       </div>
-    </div>
+      <aside>
+        <a id="github" href="https://github.com/octoxalis/contextual-css">
+          It's on Github!
+        </a>
+      </aside>
+      <footer>
+        You have just landed in a JavaScriptless page...
+      </footer>
+    </main>
   </body>
 </html>

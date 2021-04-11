@@ -1,63 +1,50 @@
+<!--context( keepCSSComment )-->
+context( stack, ignore )
 <html>
-        font-size: 16px;
-        background: hsla(210 50% 28%/1);
+        --hue_color: 210;  /* blue for all */
   <body>
-  context( stack, new )
-    <p class="paragraph">
-        display: grid;
-        margin: 2em 0;
-        color: hsla(160 50% 94%/1);
-      <i>
-              font-style: normal;
-              font-size: 150%;
-      </i>
-    </p class="paragraph">
-    <div class="select">
-            max-width: 30ch;
-            margin: 0 auto;
-      <button>
-              padding: .5em 2em;
-              color: hsla(210 50% 94%/1);
-              background: hsla(210 50% 17%/1);
-              border: 2px solid hsla(210 50% 94%/1);
-      </button>
-      +
-      <div>
-              max-height: 0;
-              overflow: hidden;
-              background: hsla(210 50% 6%/1);
-              transition: .3s;
-        <input/>
-                display: none;
-        <label>
-                display: block;
-                padding: .5em;
-                background: hsla(210 50% 61%/1);
-        </label><!-- + -->
-        <!-- || -->
-        <input/>
-        +
-        <label:hover>
-                filter: brightness(1.5);
-        </label><!-- + -->
-        <!-- || -->
-        <input:checked/>
-        +
-        <label>
-                background: hsla(210 50% 6%/1);
-                color: hsla(210 50% 94%/1);
-        </label><!-- + -->
-      </div>
-      <!-- || -->
-      <button:focus>
-      </button>
-      ~
-      <div>
-              max-height: 100vh;
-      </div>
-    </div class="select">
-    <aside>
-            background: hsla(210 6% 50%/1);
-    </aside>
+          background: hsla(var(--hue_color) 50% 28%/1);
+          font-family: Cantarell Regular, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, sans-serif;
+          font-size: 16px;
+          font-weight: 300;
+    <main>
+    context( stack, new )
+      <p class="paragraph">
+          display: grid;
+          justify-items: center;
+          margin: 2em 0;
+          color: hsla(calc(var(--hue_color) - 50) 50% 94%/1);  /* TODO: 50 as a var */
+        <i>
+                font-style: normal;
+                font-size: 150%;
+        </i>
+      </p class="paragraph"><!-- closing tag -->
+      context( url, select.context.html )
+      <aside>
+        <a>
+              display: none;
+        </a>
+        <a:target>
+              max-width: 50%;
+              display: grid;
+              justify-items: center;
+              margin: 25vh auto;
+              padding: 1rem;
+              color: hsla(var(--hue_color) 50% 94%/1);
+              font-size: 125%;
+        </a>
+      </aside>
+      <footer>
+              position: absolute;
+              bottom: 0;
+              width: 99vw;
+              margin: 1rem auto;
+              display: grid;
+              justify-items: center;
+              color: hsla(var(--hue_color) 50% 94%/1);
+              font-size: 80%;
+              font-weight: 200;
+      </footer>
+    </main>
   </body>
 </html>

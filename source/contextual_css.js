@@ -1,10 +1,109 @@
 const FS_o  = require( 'fs-extra' )
 
-const CONTEXTUAL_INPUT_s =
-  'html.context.html'
 
-const CONTEXTUAL_OUTPUT_s =
-  './'
+
+
+const REX_o =    //: smartreg: see https://github.com/octoxalis/smartreg
+{
+  comment_re: /\s+\/\/.*$/gm,
+  space_re:   /^\s+|\s+$/gm,
+  line_re:    /[\r\n]/g,
+
+
+
+  new__re:
+  (
+    flag_s
+  ) =>
+  (    //: anonymous function
+    string_s,
+    ...value_a
+  ) =>
+  {
+    const pattern__s =    //: local function
+    (
+      pattern_s,
+      raw_s,
+      at_n
+    ) =>
+    {
+      let value_ =
+        value_a
+          [at_n]
+
+      if
+      (
+        value_
+        instanceof
+        RegExp
+      )
+      {
+        value_ =
+          value_
+            .source
+      }
+
+      return `${pattern_s}${raw_s}${value_ ?? ''}`
+    }
+
+
+
+    let compile_s =
+      string_s
+        .raw
+          .reduce
+          (
+            pattern__s,
+            ''
+          )
+    ;[
+      REX_o.comment_re,
+      REX_o.space_re,
+      REX_o.line_re
+    ]
+      .forEach
+      (
+        regex_re =>
+          compile_s =
+            compile_s
+              .replace
+              (
+                regex_re,
+                ''
+              )
+      )
+      
+    return (
+      new RegExp
+      (
+        compile_s,
+        flag_s
+      )
+    )
+  }
+}
+
+
+
+
+const I_re =
+  REX_o
+    .new__re( 'i' )
+
+const GM_re =
+  REX_o
+    .new__re( 'gm' )
+
+const CONTEXTUAL_INPUT_s = 'html.context.html'
+
+const CONTEXTUAL_OUTPUT_s = './'
+
+const CHILD_SELECTOR_s = '>'
+
+const GENERAL_SIBLING_SELECTOR_s = '~'
+
+const ADJACENT_SIBLING_SELECTOR_s = '+'
+
 
 
 
@@ -29,9 +128,41 @@ const CSS_o =
   minify_b: false,    //: use context( minify ) to minify output
   verbose_b: false,
 
-  CHILD_SELECTOR_s: '>',
-  GENERAL_SIBLING_SELECTOR_s: '~',
-  ADJACENT_SIBLING_SELECTOR_s: '+',
+
+
+
+  proceed__v:
+  () =>
+  {
+    if
+    (
+      CSS_o
+        .proceed_a
+          .length
+    )
+    {
+      const proceed_o =
+        CSS_o
+          .proceed_a
+            .pop()
+
+      CSS_o
+        .path_s =
+          proceed_o
+            .path_s
+  
+      CSS_o
+        .initStack_a =
+          proceed_o
+            .stack_a
+  
+      CSS_o
+        .read__s()
+    }
+  }
+  ,
+
+
 
 
   read__s:
@@ -108,40 +239,6 @@ const CSS_o =
 
 
 
-  proceed__v:
-  () =>
-  {
-    if
-    (
-      CSS_o
-        .proceed_a
-          .length
-    )
-    {
-      const proceed_o =
-        CSS_o
-          .proceed_a
-            .pop()
-
-      CSS_o
-        .path_s =
-          proceed_o
-            .path_s
-  
-      CSS_o
-        .initStack_a =
-          proceed_o
-            .stack_a
-  
-      CSS_o
-        .read__s()
-    }
-  }
-  ,
-
-
-
-
   parse__s:
   (
     ccss_s
@@ -161,7 +258,7 @@ const CSS_o =
 
 
     CSS_o
-      .clean__v( ccss_s )
+      .init__v( ccss_s )
 
     for
     (
@@ -243,7 +340,7 @@ const CSS_o =
 
 
 
-  clean__v:
+  init__v:
   (
     ccss_s
   ) =>
@@ -277,22 +374,32 @@ const CSS_o =
         .trim()
         .replace
         (
-          /<!--[\s\S]*?-->/gm,  //: strip HTML comments (before css comments)
-          ''
+          GM_re
+            `
+            <!--        //: HTML comment opening
+            [\s\S]*?    //: anything inside
+            -->         //: HTML comment closing
+            `,          //: pattern:  `<!-- comment -->`
+          ''            //: strip HTML comments (before css comments)
         )
 
     if
     (
-      ccss_s
-        .includes( 'cssComment' )  //: as context( cssComment )
+      ! ccss_s
+          .includes( 'keepCSSComment' )  //: as context( keepCSSComment )
     )
     {
       ccss_s =
         ccss_s
           .replace
           (
-            /\/\*[\s\S]*?\*\//gm,  //: strip CSS comments
-            ''
+            GM_re
+              `
+              \/\*        //: HTML comment opening
+              [\s\S]*?    //: anything inside
+              \*\/        //: HTML comment closing
+              `,          //: pattern:  `/* comment */`
+            ''            //: strip CSS comments
           )
     }
 
@@ -302,6 +409,7 @@ const CSS_o =
           .split( '\n' )
   }
   ,
+
 
 
 
@@ -322,7 +430,19 @@ const CSS_o =
             .lastIndexOf( '.' )
         )
 
-    return `${CSS_o.outputDir_s}${file_s}.css`
+    return (
+      CSS_o
+        .outputDir_s
+      +
+      file_s
+        .replace
+        (
+          '.context',
+          ''            //: strip '.context' if present
+        )
+      +
+      '.css'
+    )
   }
   ,
 
@@ -360,20 +480,27 @@ const CSS_o =
       case
         line_s
         ===
-        CSS_o
-          .ADJACENT_SIBLING_SELECTOR_s
+        ADJACENT_SIBLING_SELECTOR_s
       :
       case
         line_s
         ===
-        CSS_o
-          .GENERAL_SIBLING_SELECTOR_s
+        GENERAL_SIBLING_SELECTOR_s
       :
         return 'sibling'
     
       case
-        /context\s?\(\s?([^\)]+?)\s?\)/i
-          .test( line_s )
+        I_re
+          `
+          context        //: contextual function name
+          \s?            //: optional space after context function name
+          \(             //: function opening parenthesis
+          \s?            //: optional space after opening parenthesis
+          ([^\)]+?)      //: anything before closing parenthesis
+          \s?            //: optional space before closing parenthesis
+          \)             //: function closing parenthesis
+          `              //: pattern:  `context( stack, new )`
+            .test( line_s )
       :
         return 'context'
     
@@ -400,7 +527,19 @@ const CSS_o =
   {
     const [ , context_s ] =    //: ignore match[0]
       line_s
-        .match( /context\s?\(\s?([^\)]+?)\s?\)/i )
+        .match
+        (
+          I_re
+            `
+            context        //: contextual function name
+            \s?            //: optional space after context function name
+            \(             //: function opening parenthesis
+            \s?            //: optional space after opening parenthesis
+            ([^\)]+?)      //: anything before closing parenthesis
+            \s?            //: optional space before closing parenthesis
+            \)             //: function closing parenthesis
+            `              //: pattern:  `context( stack, new )`
+        )
 
     if
     (
@@ -556,7 +695,7 @@ const CSS_o =
     if
     (
       ! CSS_o
-        .minify_b
+          .minify_b
     )
     {
       CSS_o
@@ -602,15 +741,14 @@ const CSS_o =
         &&
         (
           ! endStack_o
-            .sibling_s
+              .sibling_s
         )
         &&
         (
           endStack_o
             .tie_s
           !==
-          CSS_o
-            .CHILD_SELECTOR_s
+          CHILD_SELECTOR_s
         )
       )
       {
@@ -645,8 +783,7 @@ const CSS_o =
     const tagStack_o =
       {
         tag_s: tag_s,
-        tie_s: CSS_o
-          .CHILD_SELECTOR_s
+        tie_s: CHILD_SELECTOR_s
       }
       
     CSS_o
@@ -663,8 +800,6 @@ const CSS_o =
     line_s
   ) =>
   {
-    //;console.table( CSS_o.tagStack_a )
-
     CSS_o
       .takeUp__v()
 
@@ -695,8 +830,7 @@ const CSS_o =
         endStack_o
           .tie_s
         ===
-        CSS_o
-          .CHILD_SELECTOR_s
+        CHILD_SELECTOR_s
       )
     )
     {
@@ -738,86 +872,6 @@ const CSS_o =
   
 
 
-  sweep__v:
-  () =>
-  {
-    CSS_o
-      .takeUp__v()    //: hanging previous tag ruleset
-
-    if
-    (
-      CSS_o
-        .close_b    //: previous enclosed tag was self-closing
-    )
-    {
-      CSS_o
-        .flush__v()
-        
-      CSS_o
-        .close_b = false    //: reset
-    }
-
-  }
-  ,
-
-
-
-
-  takeUp__v:
-  () =>
-  {
-    if
-    (
-      CSS_o
-        .ruleset_s
-    )
-    {
-      CSS_o
-        .css_s +=
-          CSS_o
-            .copySelector__s()
-          +
-          CSS_o
-            .classSelector__s()
-          +
-            ' {'      //: space before
-
-      if
-      (
-        ! CSS_o
-          .minify_b
-      )
-      {
-        CSS_o
-          .css_s += '\n'
-      }
-
-      CSS_o
-        .css_s +=
-          CSS_o
-            .ruleset_s
-          +
-          '}'
-
-      if
-      (
-        ! CSS_o
-          .minify_b
-      )
-      {
-        CSS_o
-          .css_s += '\n\n'
-      }
-    
-      CSS_o
-        .ruleset_s = ''    //: reset
-    }
-  }
-  ,
-
-
-
-
   selector__s:
   () =>
   {
@@ -840,6 +894,7 @@ const CSS_o =
     }
         
     let selector_s = ''
+
     let tie_s = ''
 
     for
@@ -893,7 +948,7 @@ const CSS_o =
       if
       (
         ! CSS_o
-          .minify_b
+            .minify_b
       )
       {
         selector_s += '\n'
@@ -990,7 +1045,21 @@ const CSS_o =
 
     const match_a =
       tag_s
-        .match( /[a-z1-6]+?\s+class\s*=\s*(?:"|')([^"']+?)(?:"|')/i )
+        .match
+        (
+          I_re
+            `
+            [a-z1-6]+?    //: tag name (including h1-h6)
+            \s+           //: mandatory space
+            class         //: 'class' attribute
+            \s*           //: optional space before equal operator
+            =             //: equal operator
+            \s*           //: optional space after equal operator
+            (?:"|')       //: opening quote or double quote
+            ([^"']+?)     //: anything as quoted value
+            (?:"|')       //: closing quote or double quote
+            `             //: pattern:  `h1 class="header"`
+        )
     
     if
     (
@@ -1019,6 +1088,86 @@ const CSS_o =
             .pop()
   }
   ,
+
+
+
+  takeUp__v:
+  () =>
+  {
+    if
+    (
+      CSS_o
+        .ruleset_s
+    )
+    {
+      CSS_o
+        .css_s +=
+          CSS_o
+            .copySelector__s()
+          +
+          CSS_o
+            .classSelector__s()
+          +
+          ' {'      //: space before
+
+      if
+      (
+        ! CSS_o
+            .minify_b
+      )
+      {
+        CSS_o
+          .css_s += '\n'
+      }
+
+      CSS_o
+        .css_s +=
+          CSS_o
+            .ruleset_s
+          +
+          '}'
+
+      if
+      (
+        ! CSS_o
+          .minify_b
+      )
+      {
+        CSS_o
+          .css_s += '\n\n'
+      }
+    
+      CSS_o
+        .ruleset_s = ''    //: reset
+    }
+  }
+  ,
+
+
+
+
+  sweep__v:
+  () =>
+  {
+    CSS_o
+      .takeUp__v()    //: hanging previous tag ruleset
+
+    if
+    (
+      CSS_o
+        .close_b    //: previous enclosed tag was self-closing
+    )
+    {
+      CSS_o
+        .flush__v()
+        
+      CSS_o
+        .close_b = false    //: reset
+    }
+
+  }
+  ,
+
 
 
 
@@ -1100,5 +1249,5 @@ void function
   }
 
   console
-    .log( `Invalid arguments: 1. input file path, 2. output directory path)` )
+    .log( `Invalid arguments: (1) input file path, (2) output directory path)` )
 }()
