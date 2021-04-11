@@ -6,6 +6,13 @@ Semantic HTML driven Node JS script to create modular stylesheets:
 +  flat learning curve
 
 
+## Use
+```bash
+cd path/to/context-file/directory
+node relative/path/to/contextual_css.js html.context.html
+```
+
+
 ## Howto
 
 +  Take all (or part of) the HTML code of a web page
@@ -143,14 +150,15 @@ However, sometimes defining classes can be helpful and it can been done the foll
 
 ## File format
 
-By convention, the Contextual-CSS file have a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar, see lower). After processing, this extension is replaced by the usual `.css` one.
+By convention, the Contextual-CSS file have a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar, see lower). After processing, this extension is replaced by the usual `.css` one.<br/>
+In the tutorial, the name of each file is the root tag of the file.
 
 By convention, an 8-spaces indentation is used between the opening tag and its declarations, as to improve code reading.
 
 
 ## Examples
 
-A simple demo of [Contextual-CSS][1]
+Load this [simple demo][1] of Contextual-CSS using the files in the examples tutorial directory.
 
 
 
