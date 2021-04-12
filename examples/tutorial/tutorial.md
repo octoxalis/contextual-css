@@ -49,7 +49,7 @@ context( stack, ignore )
 ```
 
 This is the code of the main **Contextual-CSS** file used to generate this tutorial demo page modular stylesheets.
-It is a mix of two different markup languages: HTML and CSS, spiced by a few function-like directives used by the **Contextual-CSS** script.
+It is a mix of two different Web languages: HTML and CSS, spiced by a few function-like directives used by the **Contextual-CSS** script.
 
 
 ## Stack directives
