@@ -2,30 +2,37 @@
 
 
 A Node JS script to generate semantic HTML driven modular stylesheets:
-+  no-dependancy
-+  flat learning curve
++  only one dependancy: `fs-extra`
++  incredibly flat learning curve
++  one command to rule them all: modularity requires!
 
 
 ## Use
 ```bash
 cd path/to/context-file/directory
-node relative/path/to/contextual_css.js html.context.html
+tutorial $ node ../../source/contextual_css.js --h
+Valid arguments:
+        (1) [optional] input file path (default: html.context.html),
+        (2) [optional] output directory path (default: ./)
+        (3) [optional] --s (output to stdout)
+        (4) [optional] --v (verbose)
 ```
 
 
-## Howto
+## Recipe
 
-+  Take all (or part of) the `<html>` tag code of a web page (from DevTools, for instance)
++  Take all (or part of) the code enclosed in the `<html>` tag of a web page (from DevTools, for instance)
++  Remove (or comment out) the `<head>` section!!!
 +  Remove (or comment out) all text nodes inside every tag
 +  Remove (or comment out) all attributes, except those needed to specify the CSS selector to generate
-+  Insert the CSS declaration(s) relative to every tag
-+  Save the file as an HTML file (.context.html extension)
-+  Run contextual_css.js script to generate a CSS file (.css extension)
++  Insert inside each tag the needed CSS declaration(s)
++  Save the file as an HTML file (with a `.context.html` extension)
++  Run `contextual_css.js` script to generate a CSS file (`.css` extension)
 
 
 ## Motivation
 
-There are many, many ways to structure Cascadind stylesheets, but the most obvious solutions are not always the ones that are most practiced.
+There are many, many ways to structure Cascadind stylesheets, but the most obvious solutions are not always the most practiced.
 
 Contextual-CSS is one of these solutions at our fingertips: it simply uses the hierarchical structure of the HTML code to setup the rulesets declarations of the stylesheets to be generated.<br/>
 With the help of a few directives to parameterize the processing (using a `context` function), a single command yied a fully functional set of stylesheets, broken in as many components as required by the HTML structure of the page or fragment.<br/>

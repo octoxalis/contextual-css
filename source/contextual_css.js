@@ -124,9 +124,11 @@ const CSS_o =
   //-- stackState_s: '',    //: stack in selector
   //-- close_b: false,      //: self-closing tag
   //-- class_s: '',         //: replace selector by defined context class
+
   
   minify_b: false,    //: use context( minify ) to minify output
-  verbose_b: false,
+  stdout_b: false,    //: output to console, not file
+  verbose_b: false,   //: output file writing info
 
 
 
@@ -214,6 +216,18 @@ const CSS_o =
     css_s
   ) =>
   {
+    if
+    (
+      CSS_o
+        .stdout_b
+    )
+    {
+      console
+        .log( css_s)
+
+      return
+    }
+
     FS_o
       .writeFile
       (
@@ -636,7 +650,6 @@ const CSS_o =
         'minify'    //: minify output
       :
       {
-        console.log( arg_s )
         CSS_o
           .minify_b =
           arg_s
@@ -1216,20 +1229,81 @@ const CSS_o =
 void function
 ()
 {
-  const path_s =
+  const help_s =
+    `Valid arguments:
+    \t(1) [optional] input file path (default: html.context.html),
+    \t(2) [optional] output directory path (default: ./)
+    \t(3) [optional] --s (output to stdout)
+    \t(4) [optional] --v (verbose)`
+
+  let arg_a =
     process
       .argv
         .slice( 2 )
-          [0]      //: input file (*.context.html)
+
+  if
+  (
+    arg_a
+      .includes( '--h' )
+  )
+  {
+    console
+      .log( help_s )
+
+    arg_a =
+      arg_a
+        .filter
+        (
+          slot_s => slot_s !== '--h'
+        )
+  }
+
+  if
+  (
+    arg_a
+      .includes( '--v' )
+  )
+  {
+    CSS_o
+      .verbose_b =
+        true
+
+    arg_a =
+      arg_a
+        .filter
+        (
+          slot_s => slot_s !== '--v'
+        )
+  }
+
+  if
+  (
+    arg_a
+      .includes( '--s' )
+  )
+  {
+    CSS_o
+      .stdout_b =
+        true
+
+    arg_a =
+      arg_a
+        .filter
+        (
+          slot_s => slot_s !== '--s'
+        )
+  }
+
+  const path_s =
+    arg_a
+      [0]      //: input file (*.context.html)
     ||
     CONTEXTUAL_INPUT_s
 
   CSS_o
     .outputDir_s =
-      process
-        .argv
-          .slice( 2 )
-            [1]    //: output file (*.css) directory
+      arg_a
+        [1]    //: output file (*.css) directory
       ||
       CONTEXTUAL_OUTPUT_s
 
@@ -1268,5 +1342,5 @@ void function
   }
 
   console
-    .log( `Invalid arguments: (1) input file path, (2) output directory path)` )
+    .log( help_s )
 }()
