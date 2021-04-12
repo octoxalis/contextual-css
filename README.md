@@ -1,7 +1,7 @@
 # Contextual-CSS
 
 
-Semantic HTML driven Node JS script to create modular stylesheets:
+A Node JS script to generate semantic HTML driven modular stylesheets:
 +  no-dependancy
 +  flat learning curve
 
@@ -15,44 +15,41 @@ node relative/path/to/contextual_css.js html.context.html
 
 ## Howto
 
-+  Take all (or part of) the HTML code of a web page
++  Take all (or part of) the `<html>` tag code of a web page (from DevTools, for instance)
 +  Remove (or comment out) all text nodes inside every tag
-+  Remove (or comment out) all attributes except those needed to specify the CSS selector to generate
-+  Insert the CSS declaration(s) relative to each tag
-+  Save the file as an HTML file (.html extension)
-+  Run the Node JS script to generate a CSS file (.css extension)
++  Remove (or comment out) all attributes, except those needed to specify the CSS selector to generate
++  Insert the CSS declaration(s) relative to every tag
++  Save the file as an HTML file (.context.html extension)
++  Run contextual_css.js script to generate a CSS file (.css extension)
 
 
 ## Motivation
 
 There are many, many ways to structure Cascadind stylesheets, but the most obvious solutions are not always the ones that are most practiced.
 
-Contextual-CSS is one of these solutions at our fingertips: it simply uses the hierarchical structure of the HTML code to setup the rulesets declarations of the stylesheets we want to create.<br/>
-With the help of a few directives to parameterize the processing, using a `context` function, a one Node JS command yied a fully functional set of stylesheets, broken in as many components as required by the CSS designer of the whole HTML structure of a Web page.
+Contextual-CSS is one of these solutions at our fingertips: it simply uses the hierarchical structure of the HTML code to setup the rulesets declarations of the stylesheets to be generated.<br/>
+With the help of a few directives to parameterize the processing (using a `context` function), a single command yied a fully functional set of stylesheets, broken in as many components as required by the HTML structure of the page or fragment.<br/>
+Of course, if the HTML code is further modified, the relative Contextual-CSS file has to reflect the change.
 
 
 ## Tags and declarations
 
-The skeleton of a Contextual-CSS file is a replica of the its associated HTML page or fragment: tags only that are filled with the related CSS declarations.
+The skeleton of a Contextual-CSS file is a replica of its associated HTML page (or fragment): tags only, that will be filled with CSS declarations.
 
-But tags are not enougth to have all the nuances of a stylesheet that are desired. Some declarations are related to a specific state of a DOM node and its tag have to reflect this state.<br/>
-Therefore tags can not only be tags but also selectors:
+But tags are not enougth to capture all the nuances of a stylesheet that are desired. Some declarations are related to specific states of the DOM nodes and their tags have to reflect this state.<br/>
+Therefore tags can not only be pure tags but also tags with selectors:
 ```html
 <aside>
   <a>
         display: none;
   </a>
-  <a:target>
-        max-width: 50%;
+  <a:target><!-- else -->
         display: grid;
         justify-items: center;
-        margin: 25vh auto;
-        padding: 1rem;
-        color: hsla(var(--hue_color) 50% 94%/1);
-        font-size: 125%;
   </a>
 </aside>
 ```
+The `<!-- else -->` comments denote that there are two states of the `aside > a` relation: the inactive state and the "targeted" state.
 
 Most usual kinds of CSS selectors can be added to any tag: they have to follow the usual CSS selector syntax:
 ```html
@@ -64,9 +61,34 @@ Most usual kinds of CSS selectors can be added to any tag: they have to follow t
 __Important__: **Self-closing tags have to be closed!**
 
 
+## Descendant selectors
+By default, the HTML nesting hierarchy is replicated using the immediate descendant selector: `>`
+```html
+<ul>
+        display: flex;
+  <li>
+          color: red;
+  </li>
+<ul>
+```
+will generate the following stylesheet:
+```html
+ul {
+  display: flex;
+}
+
+ul > li {
+  color: red;
+}
+```
+It's the basis of Contextual-CSS processing.
+
+
+Nevertheless, other relations between HTML nodes are possible, as follow.
+
 ## Sibling selectors
 
-To specify a general or adjacent sibling relation between to consecutive tags at the same nesting level either a general selector (`~`) or adjacent selector (`+`) have to be inserted on a single line of its own between the two tags:
+To specify a general or adjacent sibling relation between to consecutive tags at the same nesting level, either a general selector (`~`) or adjacent selector (`+`) have to be inserted on a line of its own between two tags:
 ```html
 <input/>
 +
@@ -74,8 +96,6 @@ To specify a general or adjacent sibling relation between to consecutive tags at
         filter: brightness(1.5);
 </label>
 ```
-
-
 
 ## The context function
 
@@ -140,20 +160,37 @@ All following rulesets will be minified if `boolean` is `true` (or `TRUE`) and<b
 not minified if it's `false` (or `FALSE`).
 
 
+### **comment**
+<hr/>
+
+
+#### `context( comment )`
+
+All HTML comments (relative to tags: `<!-- comment -->`) are automatically removed from the generated `.css` file.
+
+By default, all CSS comments (relative to declarations: `/* comment */`) are also removed, unless a context-comment directive has been set (and not commented out by an HTML comment), usually at the begining of the file.
+
+
 ## Classes
 
 Contextual-CSS has been designed primarily a classless stylesheet utility: selectors are driven by the HTML hierarchy.
 
-However, sometimes defining classes can be helpful and it can been done the following way:<br/>
-+  to declare any tag as a class, add the usual attribute/value pair `class="className"` in the opening __and closing__ tags (Contextual-CSS has not to be a valid HTML file).
+However, sometimes defining classes can be helpful and it can been done the following way
+```html
+<section class="example">
+        color: blue;
+</section class="example">
+```
+
+Note that it is mandatory to put the same attribute/value pair in the closing tag: __Contextual-CSS is not, and doesn't have to be, a valid HTML file__.
 
 
 ## File format
 
-By convention, the Contextual-CSS file have a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar, see lower). After processing, this extension is replaced by the usual `.css` one.<br/>
+By convention, the Contextual-CSS file have a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar). After processing, this extension is replaced by the usual `.css` one.<br/>
 In the tutorial, the name of each file is the root tag of the file.
 
-By convention, an 8-spaces indentation is used between the opening tag and its declarations, as to improve code reading.
+As to improve code reading, an 8-spaces indentation between the opening tag and its declarations is used.
 
 
 ## Examples

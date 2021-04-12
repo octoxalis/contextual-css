@@ -1,1 +1,48 @@
-.select {width: fit-content;  width: -moz-fit-content;margin: 0 auto;cursor: pointer;}.select > button {width: 100%;padding: .5em 2em;color: hsla(var(--hue_color) 50% 94%/1);background: hsla(var(--hue_color) 50% 17%/1);border: 2px solid hsla(var(--hue_color) 50% 94%/1);}.select > button + div {max-height: 0;overflow: hidden;background: hsla(var(--hue_color) 50% 6%/1);transition: .3s;}.select > button + div > input {display: none;}.select > button + div > label {display: block;padding: .5em;background: hsla(var(--hue_color) 50% 61%/1);}.select > button + div > label > a {color: hsla(var(--hue_color) 50% 94%/1);}.select > button + div > input + label:hover {filter: brightness(1.5);}.select > button + div > input:checked + label {background: hsla(var(--hue_color) 50% 6%/1);color: hsla(var(--hue_color) 50% 94%/1);}.select > button:focus ~ div {max-height: 100vh;    /* can take up all vertical space */}
+.select {
+width: fit-content;  width: -moz-fit-content;
+margin: 0 auto;
+cursor: pointer;
+}
+
+.select > button {
+width: 100%;
+padding: .5em 2em;
+color: hsla(var(--hue_color) 50% 94%/1);
+background: hsla(var(--hue_color) 50% 17%/1);
+border: 2px solid hsla(var(--hue_color) 50% 94%/1);
+}
+
+.select > button + div {
+max-height: 0;
+overflow: hidden;
+background: hsla(var(--hue_color) 50% 6%/1);
+transition: .3s;
+}
+
+.select > button + div > input {
+display: none;
+}
+
+.select > button + div > label {
+display: block;
+padding: .5em;
+background: hsla(var(--hue_color) 50% 61%/1);
+}
+
+.select > button + div > label > a {
+color: hsla(var(--hue_color) 50% 94%/1);
+}
+
+.select > button + div > input + label:hover {
+filter: brightness(1.5);
+}
+
+.select > button + div > input:checked + label {
+background: hsla(var(--hue_color) 50% 6%/1);
+color: hsla(var(--hue_color) 50% 94%/1);
+}
+
+.select > button:focus ~ div {
+max-height: 100vh;    /* can take up all vertical space */
+}
+

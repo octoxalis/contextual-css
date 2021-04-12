@@ -369,6 +369,9 @@ const CSS_o =
     CSS_o
       .close_b = false      //: reset
       
+    CSS_o
+      .minify_b = false     //: reset
+
     ccss_s =
       ccss_s
         .trim()
@@ -385,8 +388,19 @@ const CSS_o =
 
     if
     (
-      ! ccss_s
-          .includes( 'keepCSSComment' )  //: as context( keepCSSComment )
+      //XX! ccss_s
+      //XX    .includes( 'comment' )  //: as context( keepCSSComment )
+      ! I_re
+          `
+          context        //: contextual function name
+          \s?            //: optional space after context function name
+          \(             //: function opening parenthesis
+          \s?            //: optional space after opening parenthesis
+          comment        //: comment argument
+          \s?            //: optional space before closing parenthesis
+          \)             //: function closing parenthesis
+          `              //: pattern:  `context( comment )`
+            .test( ccss_s )
     )
     {
       ccss_s =
