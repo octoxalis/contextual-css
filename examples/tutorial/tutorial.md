@@ -1,6 +1,6 @@
 # Tutorial
 
-```html
+```html  {.line-numbers}
 <!--context( comment )-->
 context( stack, ignore )
 <html>
