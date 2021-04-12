@@ -19,7 +19,7 @@ background: hsla(var(--hue_color) 50% 6%/1);
 transition: .3s;
 }
 
-.select > button + div > input {
+.select > button + div > input:not(checked) {
 display: none;
 }
 
@@ -31,6 +31,7 @@ background: hsla(var(--hue_color) 50% 61%/1);
 
 .select > button + div > label > a {
 color: hsla(var(--hue_color) 50% 94%/1);
+text-decoration: none;
 }
 
 .select > button + div > input + label:hover {
