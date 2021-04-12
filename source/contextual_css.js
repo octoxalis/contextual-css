@@ -234,7 +234,7 @@ const CSS_o =
         path_s,
         css_s,
         'utf8',
-        out_o =>    //: callback
+        out_o =>    //: callback_f
           {
             if
             (
@@ -402,8 +402,6 @@ const CSS_o =
 
     if
     (
-      //XX! ccss_s
-      //XX    .includes( 'comment' )  //: as context( keepCSSComment )
       ! I_re
           `
           context        //: contextual function name
@@ -608,7 +606,7 @@ const CSS_o =
                 path_s: `${CSS_o.dir_s}${arg_s}`,
                 stack_a: CSS_o
                           .tagStack_a
-                            .slice()    //: copy
+                            .slice()    //: stack copy
               }
             )
  
@@ -635,7 +633,7 @@ const CSS_o =
       case
         function_s
         ===
-        'stack'    //: must be invoqued between two tags at the same level
+        'stack'
       :
       {
         CSS_o
@@ -1182,12 +1180,12 @@ const CSS_o =
   () =>
   {
     CSS_o
-      .takeUp__v()    //: hanging previous tag ruleset
+      .takeUp__v()    //: previous tag has hanging ruleset
 
     if
     (
       CSS_o
-        .close_b    //: previous enclosed tag was self-closing
+        .close_b    //: previous tag was self-closing
     )
     {
       CSS_o

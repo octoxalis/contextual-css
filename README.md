@@ -9,7 +9,7 @@ A Node JS script to generate semantic HTML driven modular stylesheets:
 
 ## Use
 ```bash
-cd path/to/context-file/directory
+cd path/to/tutorial/directory
 tutorial $ node ../../source/contextual_css.js --h
 Valid arguments:
         (1) [optional] input file path (default: html.context.html),
@@ -34,14 +34,14 @@ Valid arguments:
 
 There are many, many ways to structure Cascadind stylesheets, but the most obvious solutions are not always the most practiced.
 
-Contextual-CSS is one of these solutions at our fingertips: it simply uses the hierarchical structure of the HTML code to setup the rulesets declarations of the stylesheets to be generated.<br/>
+**Contextual-CSS** is one of these solutions at our fingertips: it simply uses the hierarchical structure of the HTML code to setup the rulesets declarations of the stylesheets to be generated.<br/>
 With the help of a few directives to parameterize the processing (using a `context` function), a single command yied a fully functional set of stylesheets, broken in as many components as required by the HTML structure of the page or fragment.<br/>
-Of course, if the HTML code is further modified, the relative Contextual-CSS file has to reflect the change.
+Of course, if the HTML code is further modified, the relative **Contextual-CSS** file has to reflect the change.
 
 
 ## Tags and declarations
 
-The skeleton of a Contextual-CSS file is a replica of its associated HTML page (or fragment): tags only, that will be filled with CSS declarations.
+The skeleton of a **Contextual-CSS** file is a replica of its associated HTML page (or fragment): tags only, that will be filled with CSS declarations.
 
 But tags are not enougth to capture all the nuances of a stylesheet that are desired. Some declarations are related to specific states of the DOM nodes and their tags have to reflect this state.<br/>
 Therefore tags can not only be pure tags but also tags with selectors:
@@ -50,13 +50,13 @@ Therefore tags can not only be pure tags but also tags with selectors:
   <a>
         display: none;
   </a>
-  <a:target><!-- else -->
+  <a:target><!-- variant -->
         display: grid;
         justify-items: center;
   </a>
 </aside>
 ```
-The `<!-- else -->` comments denote that there are two states of the `aside > a` relation: the inactive state and the "targeted" state.
+The `<!-- variant -->` comments denote that there are two states of the `aside > a` relation: the inactive state and the "targeted" state.
 
 Most usual kinds of CSS selectors can be added to any tag: they have to follow the usual CSS selector syntax:
 ```html
@@ -88,7 +88,7 @@ ul > li {
   color: red;
 }
 ```
-It's the basis of Contextual-CSS processing.
+It's the basis of **Contextual-CSS** processing.
 
 
 Nevertheless, other relations between HTML nodes are possible, as follow.
@@ -106,7 +106,7 @@ To specify a general or adjacent sibling relation between to consecutive tags at
 
 ## The context function
 
-There is only one processing function (at the moment) to organize the output of a Contextual-CSS file, whose name is: `context`!<br/>
+There is only one processing function (at the moment) to organize the output of a **Contextual-CSS** file, whose name is: `context`!<br/>
 It takes two arguments: a __name__ and a __parameter__.
 
 
@@ -126,7 +126,7 @@ This a useful function to be able to generate modular stylesheets.
 
 #### `context( stack, stack_directive )`
 
-To create every ruleset selector, Contextual-CSS uses a tag stack while processing all HTML tags in the file.<br/>
+To create every ruleset selector, **Contextual-CSS** uses a tag stack while processing all HTML tags in the file.<br/>
 This function modify the stack as follow:
 
 +   **keep**
@@ -180,7 +180,7 @@ By default, all CSS comments (relative to declarations: `/* comment */`) are als
 
 ## Classes
 
-Contextual-CSS has been designed primarily a classless stylesheet utility: selectors are driven by the HTML hierarchy.
+**Contextual-CSS** has been designed primarily a classless stylesheet utility: selectors are driven by the HTML hierarchy.
 
 However, sometimes defining classes can be helpful and it can been done the following way
 ```html
@@ -194,7 +194,7 @@ Note that it is mandatory to put the same attribute/value pair in the closing ta
 
 ## File format
 
-By convention, the Contextual-CSS file have a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar). After processing, this extension is replaced by the usual `.css` one.<br/>
+By convention, the **Contextual-CSS** file have a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar). After processing, this extension is replaced by the usual `.css` one.<br/>
 In the tutorial, the name of each file is the root tag of the file.
 
 As to improve code reading, an 8-spaces indentation between the opening tag and its declarations is used.
@@ -202,7 +202,7 @@ As to improve code reading, an 8-spaces indentation between the opening tag and 
 
 ## Examples
 
-Load this [simple demo][1] of Contextual-CSS using the files in the examples tutorial directory and read the [tutorial][2].
+Load this [simple demo][1] of **Contextual-CSS** using the files in the examples tutorial directory and read the [tutorial][2].
 
 
 
