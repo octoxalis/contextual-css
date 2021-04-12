@@ -1,7 +1,48 @@
 # Tutorial
 
-![Tutorial html.context.html file](../../screenshots/html-context.jpg)
+```html
+<!--context( comment )-->
+context( stack, ignore )
+<html>
+        --hue_color: 210;  /* blue for all */
+  <body>
+          background: hsla(var(--hue_color) 50% 28%/1);
+          font-family: Cantarell Regular, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, sans-serif;
+          font-size: 16px;
+          font-weight: 300;
+    <main>
+    context( stack, new )
+      <p class="paragraph">
+              display: grid;
+              justify-items: center;
+              margin: 2em 0;
+              color: hsla(calc(var(--hue_color) - 50) 50% 94%/1);  /* TODO: 50 as a var */
+        <i>
+                font-style: normal;
+                font-size: 150%;
+        </i>
+      </p class="paragraph"><!-- closing tag -->
+      context( url, select.context.html )
+      <aside>
+        <a>
+              display: none;
+        </a>
+        <a:target><!-- variant -->
+              max-width: 50%;
+              display: grid;
+              justify-items: center;
+              margin: 25vh auto;
+              padding: 1rem;
+              color: hsla(var(--hue_color) 50% 94%/1);
+              font-size: 125%;
+        </a>
+      </aside>
+      context( url, footer.context.html )
+    </main>
+  </body>
+</html>
 
+```
 This is the code of the main **Contextual-CSS** file used to generate this tutorial demo page modular stylesheets.
 It is a mix of two different markup languages: HTML and CSS, spiced by a few function-like directives used by the **Contextual-CSS** script.
 
@@ -96,8 +137,8 @@ context( minify, true )
 The `html.context.html` file has generated three stylesheets for the purpose of this tutorial page, but, in a real application, they would be merged in a single CSS file for performance concerns.<br/>
 As you will discover loading that page in a browser, the **Contextual-CSS** generated code is not a simple decoration of the elements of the page but, without a single line of JavaScript, it shows or hides elements: have a look at the `select.context.html` file and its generated CSS file: HTML and CSS are awesome!
 
-**Hint**: selecting _HTML is awesome_ option and selecting _I like CSS_ option triggers a different behaviour. Do you know why?
-
 And JavaScript too, because `contextual_css.js` is a Node JS script.
 
 **NB**: I hope that my _vertical coding style_ won't prevent you to review it: your comments are most welcome.
+
+**Hint**: the three selecting options of the demo page trigger different behaviours. Have you found why?
