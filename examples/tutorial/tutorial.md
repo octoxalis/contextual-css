@@ -48,7 +48,7 @@ is used to close the `paragraph` class tag: it is **mandatory** for the stack pr
 ## HTML structure
 
 **Contextual-CSS** is driven by the HTML structure of a page (or fragment). But a single HTML block can't express all the possible states of the contained tags. Therefore, it is sometimes necessary to duplicate a block to insert variations of the basic ruleset declarations.<br/>
-For instance, in the `html.context.html` file there are one variant (denoted by an HTML comment) of the basic `<a>` block:
+For instance, in the `html.context.html` file there is one variant (denoted by an HTML comment) of the basic `<a>` block:
 ```html
 <aside>
   <a>
