@@ -2,7 +2,7 @@
 
 
 A Node JS script to generate semantic HTML driven modular stylesheets:
-+  only one dependancy: `fs-extra`
++  only one dependency: `fs-extra`
 +  incredibly flat learning curve
 +  one command to rule them all: modularity requires!
 
@@ -21,8 +21,8 @@ Valid arguments:
 
 ## Recipe
 
-+  Take all (or part of) the code enclosed in the `<html>` tag of a web page (from DevTools, for instance)
-+  Remove (or comment out) the `<head>` section!!!
++  Take all (or part of) the code of a web page (from DevTools, for instance)
++  Remove (or comment out) the `<head>` section and doctype declaration!!!
 +  Remove (or comment out) all text nodes inside every tag
 +  Remove (or comment out) all attributes, except those needed to specify the CSS selector to generate
 +  Insert inside each tag the needed CSS declaration(s)
