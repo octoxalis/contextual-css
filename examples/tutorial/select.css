@@ -19,7 +19,7 @@ background: hsla(var(--hue_color) 50% 6%/1);
 transition: .3s;
 }
 
-.select > button + div > input:not(checked) {
+.select > button + div > input {
 display: none;
 }
 
