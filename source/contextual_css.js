@@ -104,6 +104,8 @@ const GENERAL_SIBLING_SELECTOR_s = '~'
 
 const ADJACENT_SIBLING_SELECTOR_s = '+'
 
+const UNIVERSAL_SELECTOR_s = 'uni'
+
 
 
 
@@ -1072,6 +1074,21 @@ const CSS_o =
     tag_s =
       tag_s
         .trim()    //: if space before or after tag name
+
+    if
+    (
+      tag_s
+        .startsWith( UNIVERSAL_SELECTOR_s )
+    )
+    {
+      tag_s =
+        tag_s
+          .replace
+          (
+            UNIVERSAL_SELECTOR_s,
+            '*'
+          )
+    }
 
     const match_a =
       tag_s

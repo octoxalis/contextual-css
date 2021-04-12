@@ -5,6 +5,11 @@
 context( stack, ignore )
 <html>
         --hue_color: 210;  /* blue for all */
+  <uni>
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+  </uni>
   <body>
           background: hsla(var(--hue_color) 50% 28%/1);
           font-family: Cantarell Regular, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, sans-serif;
@@ -41,10 +46,10 @@ context( stack, ignore )
     </main>
   </body>
 </html>
-
 ```
 This is the code of the main **Contextual-CSS** file used to generate this tutorial demo page modular stylesheets.
 It is a mix of two different markup languages: HTML and CSS, spiced by a few function-like directives used by the **Contextual-CSS** script.
+
 
 ## Stack directives
 
@@ -86,6 +91,10 @@ It is important to note that a
 is used to close the `paragraph` class tag: it is **mandatory** for the stack processing. The `<!-- closing tag -->` comment is there to remind it.
 
 
+## Universal selector
+The `<uni>` tag, not defined in the HTML5 standard is used to get the behavior a the universal CSS selector. It can be nested inside any tag (see line 5).
+
+
 ## HTML structure
 
 **Contextual-CSS** is driven by the HTML structure of a page (or fragment). But a single HTML block can't express all the possible states of the contained tags. Therefore, it is sometimes necessary to duplicate a block to insert variations of the basic ruleset declarations.<br/>
@@ -111,6 +120,7 @@ In the HTML demo page, there is only one link inside the `<aside>` block, but to
 Of course, it is not necessary to repeat all the declarations shared by these variants and the basic block.<br/>
 Here the basic tag has only one declaration and the targeted tag has more declarations. But, apart the common `display` property, all other declarations could be moved to the basic tag. It is more meaningful to let the `display: none;` declaration in the basic tag to emphasize that it is not initially visible (see lower the _Hint_ question).
 
+
 ## Modular stylesheets
 
 Organizing stylesheets in a modular way is always a good practice: this is the purpose of the `url` context functions on lines 22 and 37
@@ -120,11 +130,18 @@ context( url, select.context.html )
 The URL argument (`select.context.html`) have no quotes and its path is __relative__ to the calling file path.<br/>
 The stylesheet module generated imports the processing stack of its caller, but it can be **reset** or **ignored** as explained before, to yield a no-dependency CSS file (a component, for instance).
 
+
 ## Output
 
 ```css
 html {
 --hue_color: 210;
+}
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
 }
 
 body {
@@ -159,14 +176,12 @@ padding: 1rem;
 color: hsla(var(--hue_color) 50% 94%/1);
 font-size: 125%;
 }
-
 ```
 
 Have also a look at the `footer.context.html` output (`footer.css`) to see the result of line 1 directive:
 ```
 context( minify, true )
 ```
-
 
 ## Tutorial page
 
