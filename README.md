@@ -195,8 +195,9 @@ As to improve code reading, an 8-spaces indentation between the opening tag and 
 
 ## Examples
 
-Load this [simple demo][1] of Contextual-CSS using the files in the examples tutorial directory.
+Load this [simple demo][1] of Contextual-CSS using the files in the examples tutorial directory and read the [tutorial][2].
 
 
 
 [1]: https://github.com/octoxalis/contextual-css/blob/master/examples/tutorial/index.html
+[2]: https://github.com/octoxalis/contextual-css/blob/master/examples/tutorial/tutorial.md
