@@ -1,6 +1,6 @@
 # Tutorial
 
-```html  {.line-numbers}
+```html
 <!--context( comment )-->
 context( stack, ignore )
 <html>
@@ -47,6 +47,7 @@ context( stack, ignore )
   </body>
 </html>
 ```
+
 This is the code of the main **Contextual-CSS** file used to generate this tutorial demo page modular stylesheets.
 It is a mix of two different markup languages: HTML and CSS, spiced by a few function-like directives used by the **Contextual-CSS** script.
 
@@ -92,13 +93,16 @@ is used to close the `paragraph` class tag: it is **mandatory** for the stack pr
 
 
 ## Universal selector
-The `<uni>` tag, not defined in the HTML5 standard, is used to get the behavior of the universal CSS selector. It can be nested inside any tag (see line 5).
+The `<uni>` tag, not defined in the HTML5 standard, is used to emulate the behavior of the universal CSS selector. It can be nested inside any tag (see line 5).
+
+**However, this universal selector-tag should be avoid as much as possible because it goes against the direct parent-child relationship between the elements of the HTML structure enforced by Contextual-CSS**.
 
 
 ## HTML structure
 
 **Contextual-CSS** is driven by the HTML structure of a page (or fragment). But a single HTML block can't express all the possible states of the contained tags. Therefore, it is sometimes necessary to duplicate a block to insert variations of the basic ruleset declarations.<br/>
 For instance, in the `html.context.html` file there is one variant (denoted by an HTML comment) of the basic `<a>` block:
+
 ```html
 <aside>
   <a>
@@ -114,8 +118,8 @@ For instance, in the `html.context.html` file there is one variant (denoted by a
         font-size: 125%;
   </a>
 </aside>
-
 ```
+
 In the HTML demo page, there is only one link inside the `<aside>` block, but to differentiate the selectors according to the `:target` state, the link tag `<a>` has to be replicated.<br/>
 Of course, it is not necessary to repeat all the declarations shared by these variants and the basic block.<br/>
 Here the basic tag has only one declaration and the targeted tag has more declarations. But, apart the common `display` property, all other declarations could be moved to the basic tag. It is more meaningful to let the `display: none;` declaration in the basic tag to emphasize that it is not initially visible (see lower the _Hint_ question).
