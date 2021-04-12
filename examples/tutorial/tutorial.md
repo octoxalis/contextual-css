@@ -92,7 +92,7 @@ is used to close the `paragraph` class tag: it is **mandatory** for the stack pr
 
 
 ## Universal selector
-The `<uni>` tag, not defined in the HTML5 standard is used to get the behavior a the universal CSS selector. It can be nested inside any tag (see line 5).
+The `<uni>` tag, not defined in the HTML5 standard, is used to get the behavior of the universal CSS selector. It can be nested inside any tag (see line 5).
 
 
 ## HTML structure
