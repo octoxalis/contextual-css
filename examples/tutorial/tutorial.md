@@ -92,7 +92,7 @@ It is important to note that a
 ```html
 </p class="paragraph">
 ```
-is used to close the `paragraph` class tag: it is **mandatory** for the stack processing. The `<!-- closing tag -->` comment is there to remind it.
+is used to close the `paragraph` class tag: it is **mandatory** for the stack processing. The `<!-- class closing -->` comment is there to remind it.
 
 
 ## Universal selector
