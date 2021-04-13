@@ -56,7 +56,7 @@ Therefore tags can not only be pure tags but also tags with selectors:
   </a>
 </aside>
 ```
-The `<!-- variant -->` comments denote that there are two states of the `aside > a` relation: the inactive state and the "targeted" state.
+The `<!-- variant -->` comment denote that there are two states of the `aside > a` relation: the inactive state and the "targeted" state.
 
 Most usual kinds of CSS selectors can be added to any tag: they have to follow the usual CSS selector syntax:
 ```html
@@ -194,7 +194,7 @@ Note that it is mandatory to put the same attribute/value pair in the closing ta
 
 ## File format
 
-By convention, the **Contextual-CSS** file have a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar). After processing, this extension is replaced by the usual `.css` one.<br/>
+By convention, the **Contextual-CSS** file has a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar). After processing, this extension is replaced by the usual `.css` one.<br/>
 In the tutorial, the name of each file is the root tag of the file.
 
 As to improve code reading, an 8-spaces indentation between the opening tag and its declarations is used.

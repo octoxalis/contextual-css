@@ -1,51 +1,54 @@
 # Tutorial
 
 ```html
-<!--context( comment )-->
-context( stack, ignore )
-<html>
-        --hue_color: 210;  /* blue for all */
-  <uni>
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-  </uni>
-  <body>
-          background: hsla(var(--hue_color) 50% 28%/1);
-          font-family: Cantarell Regular, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, sans-serif;
-          font-size: 16px;
-          font-weight: 300;
-    <main>
-    context( stack, new )
-      <p class="paragraph">
-              display: grid;
-              justify-items: center;
-              margin: 2em 0;
-              color: hsla(calc(var(--hue_color) - 50) 50% 94%/1);  /* TODO: 50 as a var */
-        <i>
-                font-style: normal;
-                font-size: 150%;
-        </i>
-      </p class="paragraph"><!-- closing tag -->
-      context( url, select.context.html )
-      <aside>
-        <a>
-              display: none;
-        </a>
-        <a:target><!-- variant -->
-              max-width: 50%;
-              display: grid;
-              justify-items: center;
-              margin: 25vh auto;
-              padding: 1rem;
-              color: hsla(var(--hue_color) 50% 94%/1);
-              font-size: 125%;
-        </a>
-      </aside>
-      context( url, footer.context.html )
-    </main>
-  </body>
-</html>
+context( comment )
+<div class="select">
+        width: fit-content;  width: -moz-fit-content;
+        margin: 0 auto;
+        cursor: pointer;
+  <button>
+          width: 100%;
+          padding: .5em 2em;
+          color: hsla(var(--hue_color) 50% 94%/1);
+          background: hsla(var(--hue_color) 50% 17%/1);
+          border: 2px solid hsla(var(--hue_color) 50% 94%/1);
+  </button>
+  +
+  <div>
+          max-height: 0;
+          overflow: hidden;
+          background: hsla(var(--hue_color) 50% 6%/1);
+          transition: .3s;
+    <input/>
+            display: none;
+    <label>
+            display: block;
+            padding: .5em;
+            background: hsla(var(--hue_color) 50% 61%/1);
+      <a>
+        color: hsla(var(--hue_color) 50% 94%/1);
+        text-decoration: none;
+      </a>
+    </label>
+    <!-- variant --><input/>
+                    +
+                    <label:hover>
+                            filter: brightness(1.5);
+                    </label>
+    <!-- variant --><input:checked/>
+                    +
+                    <label>
+                            background: hsla(var(--hue_color) 50% 6%/1);
+                            color: hsla(var(--hue_color) 50% 94%/1);
+                    </label>
+  </div>
+  <!-- variant --><button:focus>
+                  </button>
+                  ~
+                  <div>
+                          max-height: 100vh;    /* can take up all vertical space */
+                  </div>
+</div class="select"><!-- class closing -->
 ```
 
 This is the code of the main **Contextual-CSS** file used to generate this tutorial demo page modular stylesheets.
@@ -108,20 +111,20 @@ For instance, in the `html.context.html` file there is one variant (denoted by a
   <a>
         display: none;
   </a>
-  <a:target><!-- variant -->
-        display: grid;
-        justify-items: center;
-        margin: 25vh auto;
-        padding: 1rem;
-        max-width: 50%;
-        color: hsla(var(--hue_color) 50% 94%/1);
-        font-size: 125%;
-  </a>
+  <!-- variant --><a:target>
+                          max-width: 50%;
+                          display: grid;
+                          justify-items: center;
+                          margin: 25vh auto;
+                          padding: 1rem;
+                          color: hsla(var(--hue_color) 50% 94%/1);
+                          font-size: 125%;
+                  </a>
 </aside>
 ```
 
 In the HTML demo page, there is only one link inside the `<aside>` block, but to differentiate the selectors according to the `:target` state, the link tag `<a>` has to be replicated.<br/>
-Of course, it is not necessary to repeat all the declarations shared by these variants and the basic block.<br/>
+Of course, it is not necessary to repeat all the declarations shared by these variants and the basic block (indentation is used to make them outstanding).<br/>
 Here the basic tag has only one declaration and the targeted tag has more declarations. But, apart the common `display` property, all other declarations could be moved to the basic tag. It is more meaningful to let the `display: none;` declaration in the basic tag to emphasize that it is not initially visible (see lower the _Hint_ question).
 
 
