@@ -95,10 +95,15 @@ It is important to note that a
 is used to close the `paragraph` class tag: it is **mandatory** for the stack processing. The `<!-- class closing -->` comment is there to remind it.
 
 
-## Universal selector
+## Universal and root selectors
 The `<uni>` tag, not defined in the HTML5 standard, is used to emulate the behavior of the universal CSS selector. It can be nested inside any tag (see line 5).
 
-**However, this universal selector-tag should be avoid as much as possible because it goes against the direct parent-child relationship between the elements of the HTML structure enforced by Contextual-CSS**.
+You can also simply use the usual asterisk character (`*`) as a tag, to get a similar result.
+
+In the same way, the root selector tag can be set as a `<:root></:root>` pair.
+
+
+**This universal selector-tag should be avoid as much as possible because it goes against the direct parent-child relationship between the elements of the HTML structure enforced by Contextual-CSS**.
 
 
 ## HTML structure

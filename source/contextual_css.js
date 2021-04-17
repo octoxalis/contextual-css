@@ -749,6 +749,19 @@ const CSS_o =
         ' '            //: space before
         +
         line_s
+
+    if
+    (
+      line_s
+        .endsWith( ';' )    //: end of declaration
+      &&
+      ! CSS_o
+          .minify_b
+    )
+    {
+      CSS_o
+        .ruleset_s += '\n'
+    }
   }
   ,
     
