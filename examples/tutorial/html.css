@@ -1,43 +1,8 @@
 html {
 --hue_color: 210;
 }
-
 * {
 margin: 0;
 padding: 0;
 box-sizing: border-box;
 }
-
-body {
-background: hsla(var(--hue_color) 50% 28%/1);
-font-family: Cantarell Regular, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, sans-serif;
-font-size: 16px;
-font-weight: 300;
-}
-
-.paragraph {
-display: grid;
-justify-items: center;
-margin: 2em 0;
-color: hsla(calc(var(--hue_color) - 50) 50% 94%/1);
-}
-
-.paragraph > i {
-font-style: normal;
-font-size: 150%;
-}
-
-aside > a {
-display: none;
-}
-
-aside > a:target {
-max-width: 50%;
-display: grid;
-justify-items: center;
-margin: 25vh auto;
-padding: 1rem;
-color: hsla(var(--hue_color) 50% 94%/1);
-font-size: 125%;
-}
-

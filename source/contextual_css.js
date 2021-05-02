@@ -104,28 +104,50 @@ const GENERAL_SIBLING_SELECTOR_s = '~'
 
 const ADJACENT_SIBLING_SELECTOR_s = '+'
 
-const UNIVERSAL_SELECTOR_s = 'uni'
+//XX const UNIVERSAL_SELECTOR_s = 'uni'
 
+const STATEMENT_BLOCK_s = 'block'
 
+const TAG_START_s = '<'
 
+const AT_RULE_s = '@'
 
+const KEYWORD_a =    //: at-rule keywords
+  [
+    'charset',        //: 0 argument
+    'viewport',       //: idem
+    'font-face',      //: idem
+
+    'import',         //: 1 argument
+    'namespace',      //: idem
+    'counter-style',  //: idem
+    'property',       //: idem
+    'keyframes',      //: idem
+
+    'media',
+    'supports',
+  ]
+  
 const CSS_o =
 {
   
-  proceed_a: [],
+  proceed_a: [],    //: FIFO
+  block_a: [],
   
   //-- line_a: [],
-  //-- tagStack_a: [],
-  //-- copyStack_a: [],
-  //-- initStack_a: [],
+  //-- line_n: 0,         //: line_a iterator index
+  //-- tagStack_a: [],    //: LIFO
+  //-- copyStack_a: [],   //: LIFO
+  //-- initStack_a: [],   //: LIFO
   //-- path_s: '',
   //-- outputDir_s: ''        //: output directory
   //-- css_s : '',
   //-- ruleset_s: '',
   //-- lastTag_o: {},
+  //-- atRule_o: {},
   //-- stackState_s: '',    //: stack in selector
-  //-- close_b: false,      //: self-closing tag
   //-- class_s: '',         //: replace selector by defined context class
+  //-- close_b: false,      //: self-closing tag
 
   
   minify_b: false,    //: use context( minify ) to minify output
@@ -148,20 +170,20 @@ const CSS_o =
       const proceed_o =
         CSS_o
           .proceed_a
-            .pop()
+            .shift()
 
       CSS_o
         .path_s =
           proceed_o
             .path_s
-  
+
       CSS_o
         .initStack_a =
           proceed_o
             .stack_a
   
       CSS_o
-        .read__s()
+        .read__v()
     }
   }
   ,
@@ -169,7 +191,7 @@ const CSS_o =
 
 
 
-  read__s:
+  read__v:
   () =>
     FS_o
       .readFile
@@ -179,7 +201,7 @@ const CSS_o =
         'utf8' ,
         (            //: callback_f
           error_o,
-          ccss_s
+          parse_s
         ) =>
         {
           if
@@ -193,18 +215,8 @@ const CSS_o =
             )
           }
           //>
-          if
-          (
-            CSS_o
-              .verbose_b
-          )
-          {
-            console
-              .log( `-- Processing: ${CSS_o.path_s}` )
-          }
-
           CSS_o
-            .parse__s( ccss_s )
+            .parse__v( parse_s )
         }
       )
   ,
@@ -255,9 +267,9 @@ const CSS_o =
 
 
 
-  parse__s:
+  parse__v:
   (
-    ccss_s
+    parse_s
   ) =>
   {
     //======================
@@ -268,25 +280,29 @@ const CSS_o =
     )
     {
       console
-        .time('parse__s')
+        .time('parse__v')
     }
     //======================
 
 
     CSS_o
-      .init__v( ccss_s )
+      .init__v( parse_s )
 
-    for
+    while
     (
-      let line_s
-      of
+      CSS_o
+        .line_n
+      <
       CSS_o
         .line_a
+          .length
     )
     {
-      line_s =
-        line_s
-          .trim()
+      let line_s =
+        CSS_o
+          .line_a
+            [CSS_o.line_n++]
+              .trim()
 
       if
       (
@@ -328,7 +344,7 @@ const CSS_o =
     )
     {
       console
-        .timeEnd('parse__s')
+        .timeEnd('parse__v')
     }
     //=========================
 
@@ -355,41 +371,13 @@ const CSS_o =
 
 
 
-
   init__v:
   (
-    ccss_s
+    parse_s
   ) =>
   {
-    CSS_o
-      .tagStack_a =      //: inherit caller stack
-        CSS_o
-          .initStack_a
-    
-    CSS_o
-      .copyStack_a = []     //: reset
-
-    CSS_o
-      .stackState_s = ''    //: reset
-
-
-    CSS_o
-      .lastTag_o = {}       //: reset
-    
-    CSS_o
-      .ruleset_s = ''       //: reset
-
-    CSS_o
-      .css_s = ''           //: reset
-      
-    CSS_o
-      .close_b = false      //: reset
-      
-    CSS_o
-      .minify_b = false     //: reset
-
-    ccss_s =
-      ccss_s
+    parse_s =
+      parse_s
         .trim()
         .replace
         (
@@ -414,11 +402,11 @@ const CSS_o =
           \s?            //: optional space before closing parenthesis
           \)             //: function closing parenthesis
           `              //: pattern:  `context( comment )`
-            .test( ccss_s )
+            .test( parse_s )
     )
     {
-      ccss_s =
-        ccss_s
+      parse_s =
+        parse_s
           .replace
           (
             GM_re
@@ -433,8 +421,42 @@ const CSS_o =
 
     CSS_o
       .line_a =
-        ccss_s
+        parse_s
           .split( '\n' )
+
+    CSS_o
+      .line_n = 0
+
+    CSS_o
+      .tagStack_a =      //: inherit caller stack
+        CSS_o
+          .initStack_a
+    
+    CSS_o
+      .copyStack_a = []     //: reset
+
+    CSS_o
+      .stackState_s = ''    //: reset
+
+
+    CSS_o
+      .lastTag_o = {}       //: reset
+    
+    CSS_o
+      .ruleset_s = ''       //: reset
+
+    CSS_o
+      .atRule_o = {}        //: reset
+
+    CSS_o
+      .css_s = ''           //: reset
+      
+    CSS_o
+      .close_b = false      //: reset
+      
+    CSS_o
+      .minify_b = false     //: reset
+
   }
   ,
 
@@ -493,7 +515,7 @@ const CSS_o =
       case
         char_s
         ===
-        '<'
+        TAG_START_s
       :
         return (
           line_s[1]
@@ -505,6 +527,13 @@ const CSS_o =
             'open'
         )
     
+      case
+        char_s
+        ===
+        AT_RULE_s
+      :
+        return 'atRule'
+
       case
         line_s
         ===
@@ -591,12 +620,10 @@ const CSS_o =
 
     switch
     (
-      true
+      function_s
     )
     {
       case
-        function_s
-        ===
         'url'
       :
       {
@@ -616,8 +643,36 @@ const CSS_o =
       }
  
       case
-        function_s
-        ===
+        'block'
+      :
+      {
+        let block_s =
+          CSS_o
+            .block_a
+              [arg_s]
+
+        if
+        (
+          ! block_s
+        )
+        {
+          const error_s =
+            `ERROR: "${arg_s}" statements block is missing`
+            
+          console.log( error_s )
+
+          block_s =
+          `/* ${error_s} */\n`
+        }
+
+        CSS_o
+          .ruleset_s +=
+            block_s
+
+        return
+      }
+ 
+      case
         'copy'
       :
       {
@@ -633,8 +688,6 @@ const CSS_o =
       }
  
       case
-        function_s
-        ===
         'stack'
       :
       {
@@ -645,9 +698,7 @@ const CSS_o =
       }
  
       case
-        function_s
-        ===
-        'minify'    //: minify output
+        'minify'
       :
       {
         CSS_o
@@ -666,14 +717,14 @@ const CSS_o =
  
  
  
-   stack__v:
+  stack__v:
   (
-    arg_s
+    state_s
   ) =>
   {
     switch
     (
-      arg_s
+      state_s
     )
     {
       case
@@ -753,7 +804,7 @@ const CSS_o =
     if
     (
       line_s
-        .endsWith( ';' )    //: end of declaration
+        .endsWith( ';' )    //: end of statements
       &&
       ! CSS_o
           .minify_b
@@ -825,6 +876,18 @@ const CSS_o =
       CSS_o
         .tag__s( line_s )
 
+    if
+    (
+      tag_s
+        .startsWith( STATEMENT_BLOCK_s )
+    )
+    {
+      CSS_o
+        .block_s =
+          CSS_o
+            .block__s( line_s )
+    }
+
     const tagStack_o =
       {
         tag_s: tag_s,
@@ -837,7 +900,6 @@ const CSS_o =
   }
   ,
     
-
 
 
   close__v:
@@ -911,10 +973,334 @@ const CSS_o =
     CSS_o
       .tagStack_a
         .push( tagStack_o )
-
   }
   ,
   
+
+
+  block__s:
+  (
+    line_s
+  ) =>
+  {
+    line_s =
+      line_s
+        .slice
+        (
+          1,    //: strip starting '<'
+          -1    //: strip ending '>'
+        )
+
+    return (
+      line_s
+        .replace
+        (
+          STATEMENT_BLOCK_s,
+          ''
+        )
+        .trim()
+    )
+  }
+  ,
+
+
+
+
+  atRule__v:
+  (
+    line_s
+  ) =>
+  {
+    const keyword_s =
+      line_s
+        .slice( 1 )      //: skip AT_RULE_s
+        
+
+    if
+    (
+      ! keyword_s    //: closing @media || @supports -> takeup
+    )
+    {
+      CSS_o
+        .css_s +=
+          `\n`                               //: need new line
+          + `@${CSS_o.atRule_o.keyword_s} `  //: space
+          + `${CSS_o.atRule_o.target_s} `    //: space
+          + `{\n`
+          + `${CSS_o.atRule_o.css_s}`
+          + `}`
+
+      CSS_o
+        .atRule_o = {}    //: reset
+
+      return
+    }
+    //>
+    
+    let target_s = ''    //: target, condition, name
+
+    let target_b = false
+
+    let statement_s = ''
+
+    while    //: parse lines till start of statements (@media, @supports) or end (other at-rules)
+    (
+      CSS_o
+        .line_n
+      <
+      CSS_o
+        .line_a
+          .length
+    )
+    {
+      let line_s =
+        CSS_o
+          .line_a
+            [CSS_o.line_n++]
+              .trim()
+
+      if
+      (
+        line_s
+        ===
+        AT_RULE_s    //: closing at-rule
+      )
+      {
+        if
+        (
+          KEYWORD_a
+            .includes( keyword_s )
+          &&
+          statement_s
+        )
+        {
+          CSS_o
+            .css_s +=
+              CSS_o
+                .atRule__s
+                (
+                  keyword_s,
+                  target_s,
+                  statement_s
+                )
+        }
+
+        break
+      }
+
+      if
+      (
+        ! target_s    //: start target_s parsing
+      )
+      {
+        target_s =
+          `${line_s}\n`
+
+        target_b =
+          true
+
+        continue
+      }
+
+      if
+      (
+        ! line_s       //: empty line to end target_s list
+        && target_b    //: target_s parsing finished
+      )
+      {
+        target_s =
+          target_s
+            .slice
+            (
+              0,
+              -1    //: remove last '\n'
+            )
+
+        target_b =
+          false      //: reset
+
+        continue
+      }
+
+      if
+      (
+        target_b    //: still parsing target_s - test after previous one
+      )
+      {
+        target_s +=
+          `${line_s}\n`
+
+        continue
+      }
+
+      if
+      (
+        keyword_s
+        ===
+        'media'
+        ||
+        keyword_s
+        ===
+        'supports'    //: let html parse at-rule statements
+      )
+      {
+        CSS_o
+          .atRule_o =
+            {
+              keyword_s: keyword_s,
+              target_s: target_s,
+              statement_s: statement_s,
+              css_s: ''
+            }
+
+        return
+      }
+      //>
+      statement_s +=      //: follow on parsing statements
+        line_s
+    }
+  }
+  ,
+
+
+  atRule__s:
+  (
+    keyword_s,
+    target_s,
+    statement_s
+  ) =>
+  {
+    let atRule_s
+
+    switch
+    (
+      keyword_s
+    )
+    {
+      case
+        'import'
+      :
+        atRule_s =
+          `@${keyword_s} ${statement_s} ${target_s}`
+
+        if
+        (
+          ! atRule_s
+              .endsWith( ';' )
+        )
+        {
+          atRule_s +=
+            ';'
+        }
+
+        break
+    
+      case
+        'charset'
+      :
+        atRule_s =
+          `@${keyword_s} ${statement_s}`
+
+        if
+        (
+          ! atRule_s
+              .endsWith( ';' )
+        )
+        {
+          atRule_s +=
+            ';'
+        }
+
+        break
+    
+      case
+        'namespace'
+      :
+        atRule_s =
+          `@${keyword_s} ${target_s} ${statement_s}`
+
+        if
+        (
+          ! atRule_s
+              .endsWith( ';' )
+        )
+        {
+          atRule_s +=
+            ';'
+        }
+
+        break
+    
+      case
+        'viewport'
+      :
+      case
+        'font-face'
+      :
+        statement_s =
+          statement_s
+            .replaceAll
+            (
+              ';',
+              ';\n'
+            )
+            .trim()
+
+        atRule_s =
+          `@${keyword_s} {\n${statement_s}\n}`
+
+        break
+    
+      case
+        'counter-style'
+      :
+      case
+        'property'
+      :
+        statement_s =
+          statement_s
+            .replaceAll
+            (
+              ';',
+              ';\n'
+            )
+            .trim()
+
+        atRule_s =
+          `@${keyword_s} ${target_s} {\n${statement_s}\n}`
+
+        break
+    
+      case
+        'keyframes'
+      :
+        statement_s =
+          statement_s
+            .replaceAll
+            (
+              '}',
+              '}\n'
+            )
+            .trim()
+
+        atRule_s =
+          `@${keyword_s} ${target_s} {\n${statement_s}\n}`
+
+        break
+    
+      default
+      :
+        atRule_s =
+        `@${keyword_s} ${target_s} {\n${statement_s}\n}`
+
+        break
+    }
+
+    return `${atRule_s}\n`
+  }
+  ,
+
+
 
 
   selector__s:
@@ -1011,9 +1397,7 @@ const CSS_o =
 
 
   classSelector__s:
-  (
-    class_s
-  ) =>
+  () =>
   {
     let selector_s =
       CSS_o
@@ -1088,21 +1472,6 @@ const CSS_o =
       tag_s
         .trim()    //: if space before or after tag name
 
-    if
-    (
-      tag_s
-        .startsWith( UNIVERSAL_SELECTOR_s )
-    )
-    {
-      tag_s =
-        tag_s
-          .replace
-          (
-            UNIVERSAL_SELECTOR_s,
-            '*'
-          )
-    }
-
     const match_a =
       tag_s
         .match
@@ -1151,6 +1520,7 @@ const CSS_o =
 
 
 
+  
   takeUp__v:
   () =>
   {
@@ -1160,8 +1530,24 @@ const CSS_o =
         .ruleset_s
     )
     {
-      CSS_o
-        .css_s +=
+      if
+      (
+        CSS_o
+          .block_s
+      )
+      {
+        CSS_o
+          .block_a
+            [CSS_o.block_s] =
+              CSS_o
+                .ruleset_s
+
+        CSS_o
+          .block_s = ''    //: reset
+      }
+      else
+      {
+        let css_s =
           CSS_o
             .copySelector__s()
           +
@@ -1169,32 +1555,49 @@ const CSS_o =
             .classSelector__s()
           +
           ' {'      //: space before
-
-      if
-      (
-        ! CSS_o
-            .minify_b
-      )
-      {
-        CSS_o
-          .css_s += '\n'
-      }
-
-      CSS_o
-        .css_s +=
+  
+        if
+        (
+          ! CSS_o
+              .minify_b
+        )
+        {
+          css_s += '\n'
+        }
+  
+        css_s +=
           CSS_o
             .ruleset_s
           +
           '}'
+  
+        if
+        (
+          ! CSS_o
+            .minify_b
+        )
+        {
+          css_s += '\n'
+        }
 
-      if
-      (
-        ! CSS_o
-          .minify_b
-      )
-      {
-        CSS_o
-          .css_s += '\n\n'
+        if
+        (
+          CSS_o
+            .atRule_o
+              .keyword_s
+        )
+        {
+          CSS_o
+            .atRule_o
+              .css_s +=
+                css_s
+        }
+        else
+        {
+          CSS_o
+            .css_s +=
+              css_s
+        }
       }
     
       CSS_o
