@@ -94,6 +94,62 @@ const GM_re =
   REX_o
     .new__re( 'gm' )
 
+
+
+const UN_o =
+{
+  write__s:
+  (
+    css_s
+  ) =>
+  {
+    css_s = css_s
+        .replace
+        (
+          GM_re`\s*{\s*`,        //: pattern: ` { `
+          ` {\n${CODE_INDENTATION_s}`
+        )
+        .replace
+        (
+          GM_re`;\s*`,        //: pattern: `; `
+          `;\n${CODE_INDENTATION_s}`
+        )
+        .replace
+        (
+          GM_re`,\s*`,
+          `, `
+        )
+        .replace
+        (
+          GM_re`[ ]*}\s*`,
+          `}\n`
+        )
+        .replace
+        (
+          GM_re`\}\s*(.+)`,
+          `}\n$1`
+        )
+        .replace
+        (
+          GM_re`\n  ([^:]+):\s*`,
+          `\n${CODE_INDENTATION_s}$1: `
+        )
+        .replace
+        (
+          GM_re`\n\s+@`,
+          `\n@`
+        )
+        .replace
+        (
+          GM_re`([A-Za-z0-9\)])}`,
+          `$1;\n}`
+        )
+    return css_s
+  }
+}
+
+const CODE_INDENTATION_s = '  '    //: 2 spaces
+
 const CONTEXTUAL_INPUT_s = 'html.context.html'
 
 const CONTEXTUAL_OUTPUT_s = './'
@@ -103,8 +159,6 @@ const CHILD_SELECTOR_s = '>'
 const GENERAL_SIBLING_SELECTOR_s = '~'
 
 const ADJACENT_SIBLING_SELECTOR_s = '+'
-
-//XX const UNIVERSAL_SELECTOR_s = 'uni'
 
 const STATEMENT_BLOCK_s = 'block'
 
@@ -150,7 +204,7 @@ const CSS_o =
   //-- close_b: false,      //: self-closing tag
 
   
-  minify_b: false,    //: use context( minify ) to minify output
+  minify_b: true,     //: minified output
   stdout_b: false,    //: output to console, not file
   verbose_b: false,   //: output file writing info
 
@@ -230,6 +284,17 @@ const CSS_o =
     css_s
   ) =>
   {
+    if
+    (
+      ! CSS_o
+          .minify_b
+    )
+    {
+      css_s =
+        UN_o
+          .write__s( css_s )
+    }
+
     if
     (
       CSS_o
@@ -402,7 +467,7 @@ const CSS_o =
           \s?            //: optional space before closing parenthesis
           \)             //: function closing parenthesis
           `              //: pattern:  `context( comment )`
-            .test( parse_s )
+          .test( parse_s )
     )
     {
       parse_s =
@@ -453,10 +518,6 @@ const CSS_o =
       
     CSS_o
       .close_b = false      //: reset
-      
-    CSS_o
-      .minify_b = false     //: reset
-
   }
   ,
 
@@ -696,20 +757,6 @@ const CSS_o =
  
         return
       }
- 
-      case
-        'minify'
-      :
-      {
-        CSS_o
-          .minify_b =
-          arg_s
-            .toLowerCase()
-          ===
-          'true'
- 
-        return
-      }
     }
    }
   ,
@@ -774,16 +821,6 @@ const CSS_o =
     CSS_o
       .ruleset_s +=
         line_s
-    
-    if
-    (
-      ! CSS_o
-          .minify_b
-    )
-    {
-      CSS_o
-        .ruleset_s += '\n'
-    }
   }
   ,
     
@@ -797,22 +834,7 @@ const CSS_o =
   {
     CSS_o
       .ruleset_s +=
-        ' '            //: space before
-        +
         line_s
-
-    if
-    (
-      line_s
-        .endsWith( ';' )    //: end of statements
-      &&
-      ! CSS_o
-          .minify_b
-    )
-    {
-      CSS_o
-        .ruleset_s += '\n'
-    }
   }
   ,
     
@@ -1023,10 +1045,10 @@ const CSS_o =
     {
       CSS_o
         .css_s +=
-          `\n`                               //: need new line
-          + `@${CSS_o.atRule_o.keyword_s} `  //: space
+          //`\n`                               //: need new line
+          `@${CSS_o.atRule_o.keyword_s} `  //: space
           + `${CSS_o.atRule_o.target_s} `    //: space
-          + `{\n`
+          + `{`
           + `${CSS_o.atRule_o.css_s}`
           + `}`
 
@@ -1094,7 +1116,7 @@ const CSS_o =
       )
       {
         target_s =
-          `${line_s}\n`
+          line_s
 
         target_b =
           true
@@ -1108,13 +1130,13 @@ const CSS_o =
         && target_b    //: target_s parsing finished
       )
       {
-        target_s =
-          target_s
-            .slice
-            (
-              0,
-              -1    //: remove last '\n'
-            )
+        //target_s =
+        //  target_s
+        //    .slice
+        //    (
+        //      0,
+        //      -1    //: remove last '\n'
+        //    )
 
         target_b =
           false      //: reset
@@ -1128,7 +1150,7 @@ const CSS_o =
       )
       {
         target_s +=
-          `${line_s}\n`
+          ` ${line_s}`    //: space separator before
 
         continue
       }
@@ -1172,6 +1194,15 @@ const CSS_o =
   {
     let atRule_s
 
+    statement_s =
+      statement_s
+        .replaceAll
+        (
+          ': ',
+          ':'      //: remove space
+        )
+        .trim()
+
     switch
     (
       keyword_s
@@ -1181,17 +1212,21 @@ const CSS_o =
         'import'
       :
         atRule_s =
-          `@${keyword_s} ${statement_s} ${target_s}`
+          CSS_o
+            .checkRuleEnd__s
+            (
+              `@${keyword_s} ${statement_s} ${target_s}`
+            )
 
-        if
-        (
-          ! atRule_s
-              .endsWith( ';' )
-        )
-        {
-          atRule_s +=
-            ';'
-        }
+        //XXif
+        //XX(
+        //XX  ! atRule_s
+        //XX      .endsWith( ';' )
+        //XX)
+        //XX{
+        //XX  atRule_s +=
+        //XX    ';'
+        //XX}
 
         break
     
@@ -1199,17 +1234,21 @@ const CSS_o =
         'charset'
       :
         atRule_s =
-          `@${keyword_s} ${statement_s}`
+          CSS_o
+            .checkRuleEnd__s
+            (
+              `@${keyword_s} ${statement_s}`
+            )
 
-        if
-        (
-          ! atRule_s
-              .endsWith( ';' )
-        )
-        {
-          atRule_s +=
-            ';'
-        }
+        //XXif
+        //XX(
+        //XX  ! atRule_s
+        //XX      .endsWith( ';' )
+        //XX)
+        //XX{
+        //XX  atRule_s +=
+        //XX    ';'
+        //XX}
 
         break
     
@@ -1217,17 +1256,21 @@ const CSS_o =
         'namespace'
       :
         atRule_s =
-          `@${keyword_s} ${target_s} ${statement_s}`
+          CSS_o
+            .checkRuleEnd__s
+            (
+              `@${keyword_s} ${target_s} ${statement_s}`
+            )
 
-        if
-        (
-          ! atRule_s
-              .endsWith( ';' )
-        )
-        {
-          atRule_s +=
-            ';'
-        }
+        //XXif
+        //XX(
+        //XX  ! atRule_s
+        //XX      .endsWith( ';' )
+        //XX)
+        //XX{
+        //XX  atRule_s +=
+        //XX    ';'
+        //XX}
 
         break
     
@@ -1237,17 +1280,18 @@ const CSS_o =
       case
         'font-face'
       :
-        statement_s =
-          statement_s
-            .replaceAll
-            (
-              ';',
-              ';\n'
-            )
-            .trim()
+        //XXstatement_s =
+        //XX  statement_s
+        //XX    //XX.replaceAll
+        //XX    //XX(
+        //XX    //XX  ';',
+        //XX    //XX  ';\n'
+        //XX    //XX)
+        //XX    .trim()
 
         atRule_s =
-          `@${keyword_s} {\n${statement_s}\n}`
+          //XX`@${keyword_s} {\n${statement_s}\n}`
+          `@${keyword_s} {${statement_s}}`
 
         break
     
@@ -1257,47 +1301,67 @@ const CSS_o =
       case
         'property'
       :
-        statement_s =
-          statement_s
-            .replaceAll
-            (
-              ';',
-              ';\n'
-            )
-            .trim()
+        //XXstatement_s =
+        //XX  statement_s
+        //XX    //XX.replaceAll
+        //XX    //XX(
+        //XX    //XX  ';',
+        //XX    //XX  ';\n'
+        //XX    //XX)
+        //XX    .trim()
 
         atRule_s =
-          `@${keyword_s} ${target_s} {\n${statement_s}\n}`
+          //XX`@${keyword_s} ${target_s} {\n${statement_s}\n}`
+          `@${keyword_s} ${target_s} {${statement_s}}`
 
         break
     
       case
         'keyframes'
       :
-        statement_s =
-          statement_s
-            .replaceAll
-            (
-              '}',
-              '}\n'
-            )
-            .trim()
+        //XXstatement_s =
+        //XX  statement_s
+        //XX    //XX.replaceAll
+        //XX    //XX(
+        //XX    //XX  '}',
+        //XX    //XX  '}\n'
+        //XX    //XX)
+        //XX    .trim()
 
         atRule_s =
-          `@${keyword_s} ${target_s} {\n${statement_s}\n}`
+          //XX`@${keyword_s} ${target_s} {\n${statement_s}\n}`
+          `@${keyword_s} ${target_s} {${statement_s}}`
 
         break
     
       default
       :
         atRule_s =
-        `@${keyword_s} ${target_s} {\n${statement_s}\n}`
+        //XX`@${keyword_s} ${target_s} {\n${statement_s}\n}`
+        `@${keyword_s} ${target_s} {${statement_s}}`
 
         break
     }
 
-    return `${atRule_s}\n`
+    //XXreturn `${atRule_s}\n`
+    return atRule_s
   }
+  ,
+
+
+
+  checkRuleEnd__s:
+  (
+    atRule_s
+  ) =>
+    atRule_s
+      .endsWith( ';' )
+    ?
+      atRule_s
+    :
+      atRule_s
+      +
+      ';'
   ,
 
 
@@ -1374,16 +1438,7 @@ const CSS_o =
       selector_s +=
         copy_s
         +
-        ','      //: rulesset selector separator
-        
-      if
-      (
-        ! CSS_o
-            .minify_b
-      )
-      {
-        selector_s += '\n'
-      }
+        ','      //: ruleset separator
     }
 
     CSS_o
@@ -1410,7 +1465,7 @@ const CSS_o =
     )
     {
       selector_s =
-        `/*${selector_s}*/\n`
+        `/*${selector_s}*/`
         +
         CSS_o
          .class_s
@@ -1556,29 +1611,11 @@ const CSS_o =
           +
           ' {'      //: space before
   
-        if
-        (
-          ! CSS_o
-              .minify_b
-        )
-        {
-          css_s += '\n'
-        }
-  
         css_s +=
           CSS_o
             .ruleset_s
           +
           '}'
-  
-        if
-        (
-          ! CSS_o
-            .minify_b
-        )
-        {
-          css_s += '\n'
-        }
 
         if
         (
@@ -1665,7 +1702,8 @@ void function
     \t(1) [optional] input file path (default: html.context.html),
     \t(2) [optional] output directory path (default: ./)
     \t(3) [optional] --s (output to stdout)
-    \t(4) [optional] --v (verbose)`
+    \t(4) [optional] --m (unminified)
+    \t(5) [optional] --v (verbose)`
 
   let arg_a =
     process
@@ -1692,24 +1730,6 @@ void function
   if
   (
     arg_a
-      .includes( '--v' )
-  )
-  {
-    CSS_o
-      .verbose_b =
-        true
-
-    arg_a =
-      arg_a
-        .filter
-        (
-          slot_s => slot_s !== '--v'
-        )
-  }
-
-  if
-  (
-    arg_a
       .includes( '--s' )
   )
   {
@@ -1722,6 +1742,42 @@ void function
         .filter
         (
           slot_s => slot_s !== '--s'
+        )
+  }
+
+  if
+  (
+    arg_a
+      .includes( '--m' )
+  )
+  {
+    CSS_o
+      .minify_b =
+        false
+
+    arg_a =
+      arg_a
+        .filter
+        (
+          slot_s => slot_s !== '--m'
+        )
+  }
+
+  if
+  (
+    arg_a
+      .includes( '--v' )
+  )
+  {
+    CSS_o
+      .verbose_b =
+        true
+
+    arg_a =
+      arg_a
+        .filter
+        (
+          slot_s => slot_s !== '--v'
         )
   }
 

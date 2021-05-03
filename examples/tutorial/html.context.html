@@ -1,4 +1,122 @@
 <!--context( comment )-->
+@charset
+.
+
+'utf-8'
+@
+
+
+
+
+@import
+print
+
+url( 'fineprint.css' )
+@
+
+
+
+
+@viewport
+.
+
+width: 320px auto;
+@
+
+
+
+
+@font-face
+.
+
+font-family: Headline;
+src: local(Futura-Medium), url('fonts.svg#MyGeometricModern') format('svg');
+@
+
+
+
+
+@namespace
+svg
+
+'http://www.w3.org/2000/svg'
+@
+
+
+
+
+@counter-style
+triangle
+
+system: cyclic;
+symbols: ‣;
+suffix: " ";
+@
+
+
+
+
+@property
+--my-color
+
+syntax: '<color>';
+initial-value: magenta;
+inherits: false;
+@
+
+
+
+
+@keyframes
+animation
+
+0% { opacity: 0 }
+100% { opacity: 1 }
+@
+
+
+
+
+@media
+screen
+and (max-width: 900px)
+and (min-height: 500px)
+
+context( stack, keep )
+<ol>
+        --col_count: 2;
+  <li>
+          color: red;
+  </li>
+</ol>
+@
+
+
+
+@supports
+(display: grid)
+
+context( stack, keep )
+<ol>
+  display: grid;
+<li>
+    color: red;
+</li>
+</ol>
+@
+
+
+
+
+@unknown
+.
+
+dummy statement
+@
+
+
+
+
 context( stack, ignore )
 <html>
         --hue_color: 210;  /* blue for all */
