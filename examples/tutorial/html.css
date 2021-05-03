@@ -1,1 +1,52 @@
-@charset 'utf-8';@import url( 'fineprint.css' ) print;@viewport {width:320px auto;}@font-face {font-family:Headline;src:local(Futura-Medium), url('fonts.svg#MyGeometricModern') format('svg');}@namespace svg 'http://www.w3.org/2000/svg';@counter-style triangle {system:cyclic;symbols:‣;suffix:" ";}@property --my-color {syntax:'<color>';initial-value:magenta;inherits:false;}@keyframes animation {0% { opacity:0 }100% { opacity:1 }}@media screen and (max-width: 900px) and (min-height: 500px) {ol {--col_count: 2;}ol > li {color: red;}}@supports (display: grid) {ol {display: grid;}ol > li {color: red;}}html {--hue_color: 210;}* {margin: 0;padding: 0;box-sizing: border-box;}
+@charset 'utf-8';
+@import url( 'fineprint.css' ) print;
+@viewport {
+  width: 320px auto;
+}
+@font-face {
+  font-family: Headline;
+  src: local(Futura-Medium), url('fonts.svg#MyGeometricModern') format('svg');
+}
+@namespace svg 'http://www.w3.org/2000/svg';
+@counter-style triangle {
+  system: cyclic;
+  symbols: ‣;
+  suffix: " ";
+}
+@property --my-color {
+  syntax: '<color>';
+  initial-value: magenta;
+  inherits: false;
+}
+@keyframes animation {
+  0% {
+  opacity: 0;
+}
+100% {
+  opacity: 1;
+}
+}
+@media screen and (max-width: 900px) and (min-height: 500px) {
+  ol {
+  --col_count: 2;
+}
+ol > li {
+  color: red;
+}
+}
+@supports (display: grid) {
+  ol {
+  display: grid;
+}
+ol > li {
+  color: red;
+}
+}
+html {
+  --hue_color: 210;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

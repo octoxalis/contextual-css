@@ -111,38 +111,38 @@ const UN_o =
         )
         .replace
         (
-          GM_re`;\s*`,        //: pattern: `; `
+          GM_re`;\s*`,           //: pattern: `; `
           `;\n${CODE_INDENTATION_s}`
         )
         .replace
         (
-          GM_re`,\s*`,
+          GM_re`,\s*`,           //: pattern: `, `
           `, `
         )
         .replace
         (
-          GM_re`[ ]*}\s*`,
+          GM_re`[ ]*\}\s*`,       //: pattern: ` }`
           `}\n`
         )
         .replace
         (
-          GM_re`\}\s*(.+)`,
+          GM_re`\}\s*(.+)`,       //: pattern: `} ...`
           `}\n$1`
         )
         .replace
         (
-          GM_re`\n  ([^:]+):\s*`,
+          GM_re`\n  ([^:]+):\s*`, //: pattern: `property: `
           `\n${CODE_INDENTATION_s}$1: `
         )
         .replace
         (
-          GM_re`\n\s+@`,
-          `\n@`
+          GM_re`([A-Za-z0-9\)])\}`, //: pattern: `10px)}`
+          `$1;\n}`
         )
         .replace
         (
-          GM_re`([A-Za-z0-9\)])}`,
-          `$1;\n}`
+          GM_re`\n${CODE_INDENTATION_s}@`, //: pattern: ` @`  (at-rule)
+          `\n@`
         )
     return css_s
   }
@@ -1218,16 +1218,6 @@ const CSS_o =
               `@${keyword_s} ${statement_s} ${target_s}`
             )
 
-        //XXif
-        //XX(
-        //XX  ! atRule_s
-        //XX      .endsWith( ';' )
-        //XX)
-        //XX{
-        //XX  atRule_s +=
-        //XX    ';'
-        //XX}
-
         break
     
       case
@@ -1239,16 +1229,6 @@ const CSS_o =
             (
               `@${keyword_s} ${statement_s}`
             )
-
-        //XXif
-        //XX(
-        //XX  ! atRule_s
-        //XX      .endsWith( ';' )
-        //XX)
-        //XX{
-        //XX  atRule_s +=
-        //XX    ';'
-        //XX}
 
         break
     
@@ -1262,16 +1242,6 @@ const CSS_o =
               `@${keyword_s} ${target_s} ${statement_s}`
             )
 
-        //XXif
-        //XX(
-        //XX  ! atRule_s
-        //XX      .endsWith( ';' )
-        //XX)
-        //XX{
-        //XX  atRule_s +=
-        //XX    ';'
-        //XX}
-
         break
     
       case
@@ -1280,70 +1250,28 @@ const CSS_o =
       case
         'font-face'
       :
-        //XXstatement_s =
-        //XX  statement_s
-        //XX    //XX.replaceAll
-        //XX    //XX(
-        //XX    //XX  ';',
-        //XX    //XX  ';\n'
-        //XX    //XX)
-        //XX    .trim()
-
         atRule_s =
-          //XX`@${keyword_s} {\n${statement_s}\n}`
           `@${keyword_s} {${statement_s}}`
 
         break
     
-      case
-        'counter-style'
-      :
-      case
-        'property'
-      :
-        //XXstatement_s =
-        //XX  statement_s
-        //XX    //XX.replaceAll
-        //XX    //XX(
-        //XX    //XX  ';',
-        //XX    //XX  ';\n'
-        //XX    //XX)
-        //XX    .trim()
-
-        atRule_s =
-          //XX`@${keyword_s} ${target_s} {\n${statement_s}\n}`
-          `@${keyword_s} ${target_s} {${statement_s}}`
-
-        break
-    
-      case
-        'keyframes'
-      :
-        //XXstatement_s =
-        //XX  statement_s
-        //XX    //XX.replaceAll
-        //XX    //XX(
-        //XX    //XX  '}',
-        //XX    //XX  '}\n'
-        //XX    //XX)
-        //XX    .trim()
-
-        atRule_s =
-          //XX`@${keyword_s} ${target_s} {\n${statement_s}\n}`
-          `@${keyword_s} ${target_s} {${statement_s}}`
-
-        break
-    
+      //--case
+      //--  'counter-style'
+      //--:
+      //--case
+      //--  'property'
+      //--:
+      //--case
+      //--  'keyframes'
+      //--:
       default
       :
         atRule_s =
-        //XX`@${keyword_s} ${target_s} {\n${statement_s}\n}`
-        `@${keyword_s} ${target_s} {${statement_s}}`
+          `@${keyword_s} ${target_s} {${statement_s}}`
 
         break
     }
 
-    //XXreturn `${atRule_s}\n`
     return atRule_s
   }
   ,
