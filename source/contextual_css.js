@@ -9,7 +9,7 @@ const REX_o =    //: smartreg: see https://github.com/octoxalis/smartreg
   (
     flag_s
   ) =>
-  (    //: anonymous function
+  (                //: anonymous function
     string_s,
     ...value_a
   ) =>
@@ -145,7 +145,7 @@ const UN_o =
         .replace
         (
           GM_re`\n${UN_o.INDENTATION_s}@`, //: pattern: ` @`  (at-rule)
-          `\n@`
+          `\n@`                            //: at line start
         )
     return css_s
   }
@@ -191,11 +191,7 @@ const CSS_o =
     \)             //: function closing parenthesis
     `,
   
-
-
-
-  
-  proceed_a: [],    //: FIFO
+  proceedStack_a: [],    //: FIFO
   block_a: [],
   
   //-- line_a: [],
@@ -226,13 +222,13 @@ const CSS_o =
     if
     (
       CSS_o
-        .proceed_a
+        .proceedStack_a
           .length
     )
     {
       const proceed_o =
         CSS_o
-          .proceed_a
+          .proceedStack_a
             .shift()
 
       CSS_o
@@ -685,7 +681,7 @@ const CSS_o =
       :
       {
         CSS_o
-          .proceed_a
+          .proceedStack_a
             .push
             ( 
               {
@@ -1026,7 +1022,6 @@ const CSS_o =
     {
       CSS_o
         .css_s +=
-          //`\n`                               //: need new line
           `@${CSS_o.atRule_o.keyword_s} `  //: space
           + `${CSS_o.atRule_o.target_s} `    //: space
           + `{`
@@ -1111,14 +1106,6 @@ const CSS_o =
         && target_b    //: target_s parsing finished
       )
       {
-        //target_s =
-        //  target_s
-        //    .slice
-        //    (
-        //      0,
-        //      -1    //: remove last '\n'
-        //    )
-
         target_b =
           false      //: reset
 
@@ -1612,7 +1599,8 @@ void function
     \t(2) [optional] output directory path (default: ./)
     \t(3) [optional] --s (stdout output)
     \t(4) [optional] --u (unminify output)
-    \t(5) [optional] --v (verbose)`
+    \t(5) [optional] --v (verbose)
+    \t(5) [optional] --h (help)`
 
   const argument_a =
     [
@@ -1641,7 +1629,7 @@ void function
 
   for
   (
-    arg_s
+    let arg_s
     of
     argument_a
   )
@@ -1666,6 +1654,45 @@ void function
              slot_s => slot_s !== `--${argChar_s}`
            )
     }
+    //else
+    //{
+    //  console
+    //    .log( `Invalid command parameter: ${arg_a}\n\n${help_s}` )
+    //
+    //  return
+    //}
+  }
+
+  const invalidArg_a = []
+
+  for
+  (
+    let arg_s
+    of
+    arg_a
+  )
+  {
+    if
+    (
+      arg_s
+        .startsWith( '-' )    //: parameter start
+    )
+    {
+      invalidArg_a
+        .push( arg_s )
+    }
+  }
+
+  if
+  (
+    invalidArg_a
+      .length
+  )
+  {
+    console
+      .log( `Invalid command parameter(s): ${invalidArg_a}\n\n${help_s}` )
+    
+    return
   }
 
   const path_s =
@@ -1700,7 +1727,7 @@ void function
           )
   
     CSS_o
-      .proceed_a
+      .proceedStack_a
         .push
         ( 
           {
