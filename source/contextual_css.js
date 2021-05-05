@@ -5,12 +5,6 @@ const FS_o  = require( 'fs-extra' )
 
 const REX_o =    //: smartreg: see https://github.com/octoxalis/smartreg
 {
-  comment_re: /\s+\/\/.*$/gm,
-  space_re:   /^\s+|\s+$/gm,
-  line_re:    /[\r\n]/g,
-
-
-
   new__re:
   (
     flag_s
@@ -56,22 +50,26 @@ const REX_o =    //: smartreg: see https://github.com/octoxalis/smartreg
             pattern__s,
             ''
           )
-    ;[
-      REX_o.comment_re,
-      REX_o.space_re,
-      REX_o.line_re
-    ]
-      .forEach
-      (
-        regex_re =>
-          compile_s =
-            compile_s
-              .replace
-              (
-                regex_re,
-                ''
-              )
-      )
+
+    for
+    (
+      regex_re
+      of
+      [
+        /\s+\/\/.*$/gm,    //:comment
+        /^\s+|\s+$/gm,     //:space
+        /[\r\n]/g,         //:line
+      ]
+    )
+    {
+      compile_s =
+        compile_s
+          .replace
+          (
+            regex_re,
+            ''
+          )
+    }
       
     return (
       new RegExp
@@ -98,6 +96,11 @@ const GM_re =
 
 const UN_o =
 {
+  INDENTATION_s: '  ',    //: 2 spaces
+
+
+
+
   write__s:
   (
     css_s
@@ -107,12 +110,12 @@ const UN_o =
         .replace
         (
           GM_re`\s*{\s*`,        //: pattern: ` { `
-          ` {\n${CODE_INDENTATION_s}`
+          ` {\n${UN_o.INDENTATION_s}`
         )
         .replace
         (
           GM_re`;\s*`,           //: pattern: `; `
-          `;\n${CODE_INDENTATION_s}`
+          `;\n${UN_o.INDENTATION_s}`
         )
         .replace
         (
@@ -132,7 +135,7 @@ const UN_o =
         .replace
         (
           GM_re`\n  ([^:]+):\s*`, //: pattern: `property: `
-          `\n${CODE_INDENTATION_s}$1: `
+          `\n${UN_o.INDENTATION_s}$1: `
         )
         .replace
         (
@@ -141,32 +144,27 @@ const UN_o =
         )
         .replace
         (
-          GM_re`\n${CODE_INDENTATION_s}@`, //: pattern: ` @`  (at-rule)
+          GM_re`\n${UN_o.INDENTATION_s}@`, //: pattern: ` @`  (at-rule)
           `\n@`
         )
     return css_s
   }
 }
 
-const CODE_INDENTATION_s = '  '    //: 2 spaces
 
-const CONTEXTUAL_INPUT_s = 'html.context.html'
 
-const CONTEXTUAL_OUTPUT_s = './'
 
-const CHILD_SELECTOR_s = '>'
-
-const GENERAL_SIBLING_SELECTOR_s = '~'
-
-const ADJACENT_SIBLING_SELECTOR_s = '+'
-
-const STATEMENT_BLOCK_s = 'block'
-
-const TAG_START_s = '<'
-
-const AT_RULE_s = '@'
-
-const KEYWORD_a =    //: at-rule keywords
+const CSS_o =
+{
+  INPUT_s:            'html.context.html',    //: default output
+  OUTPUT_s:           './',                   //: default input directory
+  CHILD_s:            '>',
+  GENERAL_SIBLING_s:  '~',
+  ADJACENT_SIBLING_s: '+',
+  BLOCK_s:            'block',
+  TAG_START_s:        '<',
+  AT_RULE_s:          '@',
+  AT_RULE_a:          //: at-rule keywords
   [
     'charset',        //: 0 argument
     'viewport',       //: idem
@@ -180,10 +178,22 @@ const KEYWORD_a =    //: at-rule keywords
 
     'media',
     'supports',
-  ]
+  ],
+  CONTEXT_re:      //: pattern:  `context( stack, new )`
+    I_re
+    `
+    context        //: contextual function name
+    \s?            //: optional space after context function name
+    \(             //: function opening parenthesis
+    \s?            //: optional space after opening parenthesis
+    ([^\)]+?)      //: anything before closing parenthesis
+    \s?            //: optional space before closing parenthesis
+    \)             //: function closing parenthesis
+    `,
   
-const CSS_o =
-{
+
+
+
   
   proceed_a: [],    //: FIFO
   block_a: [],
@@ -203,10 +213,9 @@ const CSS_o =
   //-- class_s: '',         //: replace selector by defined context class
   //-- close_b: false,      //: self-closing tag
 
-  
-  minify_b: true,     //: minified output
-  stdout_b: false,    //: output to console, not file
-  verbose_b: false,   //: output file writing info
+  stdout_b:   false,  //: output to console, not file
+  unminify_b: false,  //: minified output
+  verbose_b:  false,  //: output file writing info
 
 
 
@@ -286,8 +295,8 @@ const CSS_o =
   {
     if
     (
-      ! CSS_o
-          .minify_b
+      CSS_o
+        .unminify_b
     )
     {
       css_s =
@@ -301,6 +310,9 @@ const CSS_o =
         .stdout_b
     )
     {
+      console
+        .log( `\n----\nWriting ${path_s}\n----\n` )
+
       console
         .log( css_s)
 
@@ -321,8 +333,15 @@ const CSS_o =
                 .verbose_b
             )
             {
+              const out_s =
+                out_o
+                ?
+                  'ERROR'
+                :
+                  'OK'
+
               console
-                .log( `-- Writing ${path_s}: ${out_o}` )
+                .log( `\n----\nWriting ${path_s}: (${out_s})\n----\n` )
             }
           }
       )
@@ -576,7 +595,7 @@ const CSS_o =
       case
         char_s
         ===
-        TAG_START_s
+        CSS_o.TAG_START_s
       :
         return (
           line_s[1]
@@ -591,47 +610,32 @@ const CSS_o =
       case
         char_s
         ===
-        AT_RULE_s
+        CSS_o.AT_RULE_s
       :
         return 'atRule'
 
       case
         line_s
         ===
-        ADJACENT_SIBLING_SELECTOR_s
+        CSS_o.ADJACENT_SIBLING_s
       :
       case
         line_s
         ===
-        GENERAL_SIBLING_SELECTOR_s
+        CSS_o.GENERAL_SIBLING_s
       :
         return 'sibling'
     
       case
-        I_re
-          `
-          context        //: contextual function name
-          \s?            //: optional space after context function name
-          \(             //: function opening parenthesis
-          \s?            //: optional space after opening parenthesis
-          ([^\)]+?)      //: anything before closing parenthesis
-          \s?            //: optional space before closing parenthesis
-          \)             //: function closing parenthesis
-          `              //: pattern:  `context( stack, new )`
+        CSS_o
+          .CONTEXT_re
             .test( line_s )
       :
         return 'context'
     
       default
       :
-        return (
-          line_s
-            .includes( ':' )    //: colon after ruleset property
-          ?
-            'ruleHead'
-          :
-            'ruleTail'
-        )
+        return 'rule'
     }
   }
   ,
@@ -647,16 +651,8 @@ const CSS_o =
       line_s
         .match
         (
-          I_re
-            `
-            context        //: contextual function name
-            \s?            //: optional space after context function name
-            \(             //: function opening parenthesis
-            \s?            //: optional space after opening parenthesis
-            ([^\)]+?)      //: anything before closing parenthesis
-            \s?            //: optional space before closing parenthesis
-            \)             //: function closing parenthesis
-            `              //: pattern:  `context( stack, new )`
+          CSS_o
+            .CONTEXT_re
         )
 
     if
@@ -666,7 +662,7 @@ const CSS_o =
     {
       return void (
         console
-          .log( `Error: context() is not valid` )
+          .log( `Error: invalid context function` )
       )
     }
  
@@ -812,22 +808,7 @@ const CSS_o =
     
 
 
-
-  ruleHead__v:
-  (
-    line_s
-  ) =>
-  {
-    CSS_o
-      .ruleset_s +=
-        line_s
-  }
-  ,
-    
-
-
-
-  ruleTail__v:
+  rule__v:
   (
     line_s
   ) =>
@@ -866,7 +847,7 @@ const CSS_o =
           endStack_o
             .tie_s
           !==
-          CHILD_SELECTOR_s
+          CSS_o.CHILD_s
         )
       )
       {
@@ -901,7 +882,7 @@ const CSS_o =
     if
     (
       tag_s
-        .startsWith( STATEMENT_BLOCK_s )
+        .startsWith( CSS_o.BLOCK_s )
     )
     {
       CSS_o
@@ -913,7 +894,7 @@ const CSS_o =
     const tagStack_o =
       {
         tag_s: tag_s,
-        tie_s: CHILD_SELECTOR_s
+        tie_s: CSS_o.CHILD_s
       }
       
     CSS_o
@@ -959,7 +940,7 @@ const CSS_o =
         endStack_o
           .tie_s
         ===
-        CHILD_SELECTOR_s
+        CSS_o.CHILD_s
       )
     )
     {
@@ -1017,7 +998,7 @@ const CSS_o =
       line_s
         .replace
         (
-          STATEMENT_BLOCK_s,
+          CSS_o.BLOCK_s,
           ''
         )
         .trim()
@@ -1035,7 +1016,7 @@ const CSS_o =
   {
     const keyword_s =
       line_s
-        .slice( 1 )      //: skip AT_RULE_s
+        .slice( 1 )      //: skip CSS_o.AT_RULE_s
         
 
     if
@@ -1085,12 +1066,12 @@ const CSS_o =
       (
         line_s
         ===
-        AT_RULE_s    //: closing at-rule
+        CSS_o.AT_RULE_s    //: closing at-rule
       )
       {
         if
         (
-          KEYWORD_a
+          CSS_o.AT_RULE_a
             .includes( keyword_s )
           &&
           statement_s
@@ -1629,9 +1610,16 @@ void function
     `Valid arguments:
     \t(1) [optional] input file path (default: html.context.html),
     \t(2) [optional] output directory path (default: ./)
-    \t(3) [optional] --s (output to stdout)
-    \t(4) [optional] --m (unminified)
+    \t(3) [optional] --s (stdout output)
+    \t(4) [optional] --u (unminify output)
     \t(5) [optional] --v (verbose)`
+
+  const argument_a =
+    [
+      'stdout',
+      'unminify',
+      'verbose'
+    ]
 
   let arg_a =
     process
@@ -1647,80 +1635,51 @@ void function
     console
       .log( help_s )
 
-    arg_a =
-      arg_a
-        .filter
-        (
-          slot_s => slot_s !== '--h'
-        )
+    return
   }
+  //>
 
-  if
+  for
   (
-    arg_a
-      .includes( '--s' )
+    arg_s
+    of
+    argument_a
   )
   {
-    CSS_o
-      .stdout_b =
-        true
+    const argChar_s =
+      arg_s[0]
 
-    arg_a =
+    if
+    (
       arg_a
-        .filter
-        (
-          slot_s => slot_s !== '--s'
-        )
-  }
-
-  if
-  (
-    arg_a
-      .includes( '--m' )
-  )
-  {
-    CSS_o
-      .minify_b =
-        false
-
-    arg_a =
-      arg_a
-        .filter
-        (
-          slot_s => slot_s !== '--m'
-        )
-  }
-
-  if
-  (
-    arg_a
-      .includes( '--v' )
-  )
-  {
-    CSS_o
-      .verbose_b =
-        true
-
-    arg_a =
-      arg_a
-        .filter
-        (
-          slot_s => slot_s !== '--v'
-        )
+        .includes( `--${argChar_s}` )
+    )
+    {
+      CSS_o
+        [`${arg_s}_b`] =
+          true
+  
+       arg_a =
+         arg_a
+           .filter
+           (
+             slot_s => slot_s !== `--${argChar_s}`
+           )
+    }
   }
 
   const path_s =
     arg_a
       [0]      //: input file (*.context.html)
     ||
-    CONTEXTUAL_INPUT_s
+    CSS_o.INPUT_s
 
   CSS_o
     .outputDir_s =
       arg_a
         [1]    //: output file (*.css) directory
       ||
-      CONTEXTUAL_OUTPUT_s
+      CSS_o.OUTPUT_s
 
   if
   (
