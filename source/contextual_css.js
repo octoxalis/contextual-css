@@ -1602,13 +1602,6 @@ void function
     \t(5) [optional] --v (verbose)
     \t(5) [optional] --h (help)`
 
-  const argument_a =
-    [
-      'stdout',
-      'unminify',
-      'verbose'
-    ]
-
   let arg_a =
     process
       .argv
@@ -1631,7 +1624,11 @@ void function
   (
     let arg_s
     of
-    argument_a
+    [
+      'stdout',
+      'unminify',
+      'verbose'
+    ]
   )
   {
     const argChar_s =
@@ -1654,13 +1651,6 @@ void function
              slot_s => slot_s !== `--${argChar_s}`
            )
     }
-    //else
-    //{
-    //  console
-    //    .log( `Invalid command parameter: ${arg_a}\n\n${help_s}` )
-    //
-    //  return
-    //}
   }
 
   const invalidArg_a = []
@@ -1695,25 +1685,72 @@ void function
     return
   }
 
-  const path_s =
-    arg_a
-      [0]      //: input file (*.context.html)
-    ||
-    CSS_o.INPUT_s
+  let path_s
 
-  CSS_o
-    .outputDir_s =
-      arg_a
-        [1]    //: output file (*.css) directory
-      ||
-      CSS_o.OUTPUT_s
+  let outputDir_s
+
+  switch
+  (
+    arg_a
+      .length
+  )
+  {
+    case
+      2
+    :
+      path_s =
+        arg_a
+          [0]
+
+      outputDir_s =
+        arg_a
+          [1]
+          
+      break
+
+    case
+      1
+    :
+      if
+      (
+        arg_a
+          [0]
+            .endsWith( '/' )    //: directory
+      )
+      {
+        outputDir_s =
+          arg_a
+            [0]    //: output file (*.css) directory
+  
+        path_s =
+          CSS_o
+            .INPUT_s
+      }
+      else
+      {
+        path_s =
+          arg_a
+            [0]      //: input file (*.context.html)
+      }
+        
+      break
+
+    default
+    :
+      path_s =
+        CSS_o
+          .INPUT_s
+    
+      outputDir_s =
+        CSS_o
+          .OUTPUT_s
+  }
 
   if
   (
     path_s
     &&
-    CSS_o
-      .outputDir_s
+    outputDir_s
   )
   {
     CSS_o
@@ -1726,6 +1763,10 @@ void function
               .lastIndexOf( '/' ) + 1
           )
   
+    CSS_o
+      .outputDir_s =
+        outputDir_s
+
     CSS_o
       .proceedStack_a
         .push
