@@ -114,7 +114,7 @@ const UN_o =
             \s*
             {
             \s*
-            `,       //: pattern: ` { `
+            `,        //: pattern: ` { `
           ` {\n${UN_o.INDENTATION_s}`
         )
         .replace
@@ -132,7 +132,7 @@ const UN_o =
           `
           ,
           \s*
-          `,         //: pattern: `, `
+          `,           //: pattern: `, `
           `, `
         )
         .replace
@@ -142,7 +142,7 @@ const UN_o =
           [ ]*  
           \}
           \s*
-          `,         //: pattern: ` }`
+          `,       //: pattern: ` }`
           `}\n`
         )
         .replace
@@ -152,7 +152,7 @@ const UN_o =
           \}
           \s*
           (.+)
-          `,          //: pattern: `} ...`
+          `,       //: pattern: `} ...`
           `}\n$1`
         )
         .replace
@@ -160,11 +160,11 @@ const UN_o =
           GM_re
           `
           \n
-          \s{2}        //: double space
-          ([^:]+)      //: property name
+          \s{2}      //: double space indentation
+          ([^:]+)
           :
           \s*
-          `,           //: pattern: `property: `
+          `, //: pattern: `property: `
           `\n${UN_o.INDENTATION_s}$1: `
         )
         .replace
@@ -175,7 +175,7 @@ const UN_o =
           [A-Za-z0-9\)]
           )
           \}
-          `,             //: pattern: `10px)}`
+          `, //: pattern: `10px)}`
           `$1;\n}`
         )
         .replace
@@ -183,10 +183,10 @@ const UN_o =
           GM_re
           `
           \n
-          ${UN_o.INDENTATION_s}
+          \s{2}      //: double space indentation
           @
-          `,             //: pattern: ` @`  (at-rule)
-          `\n@`          //: at line start
+          `, //: pattern: ` @`  (at-rule)
+          `\n@`                            //: at line start
         )
     return css_s
   }
