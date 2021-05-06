@@ -109,43 +109,84 @@ const UN_o =
     css_s = css_s
         .replace
         (
-          GM_re`\s*{\s*`,        //: pattern: ` { `
+          GM_re
+            `
+            \s*
+            {
+            \s*
+            `,       //: pattern: ` { `
           ` {\n${UN_o.INDENTATION_s}`
         )
         .replace
         (
-          GM_re`;\s*`,           //: pattern: `; `
+          GM_re
+          `
+          ;
+          \s*
+          `,           //: pattern: `; `
           `;\n${UN_o.INDENTATION_s}`
         )
         .replace
         (
-          GM_re`,\s*`,           //: pattern: `, `
+          GM_re
+          `
+          ,
+          \s*
+          `,         //: pattern: `, `
           `, `
         )
         .replace
         (
-          GM_re`[ ]*\}\s*`,       //: pattern: ` }`
+          GM_re
+          `
+          [ ]*  
+          \}
+          \s*
+          `,         //: pattern: ` }`
           `}\n`
         )
         .replace
         (
-          GM_re`\}\s*(.+)`,       //: pattern: `} ...`
+          GM_re
+          `
+          \}
+          \s*
+          (.+)
+          `,          //: pattern: `} ...`
           `}\n$1`
         )
         .replace
         (
-          GM_re`\n  ([^:]+):\s*`, //: pattern: `property: `
+          GM_re
+          `
+          \n
+          \s{2}        //: double space
+          ([^:]+)      //: property name
+          :
+          \s*
+          `,           //: pattern: `property: `
           `\n${UN_o.INDENTATION_s}$1: `
         )
         .replace
         (
-          GM_re`([A-Za-z0-9\)])\}`, //: pattern: `10px)}`
+          GM_re
+          `
+          (
+          [A-Za-z0-9\)]
+          )
+          \}
+          `,             //: pattern: `10px)}`
           `$1;\n}`
         )
         .replace
         (
-          GM_re`\n${UN_o.INDENTATION_s}@`, //: pattern: ` @`  (at-rule)
-          `\n@`                            //: at line start
+          GM_re
+          `
+          \n
+          ${UN_o.INDENTATION_s}
+          @
+          `,             //: pattern: ` @`  (at-rule)
+          `\n@`          //: at line start
         )
     return css_s
   }
@@ -1698,13 +1739,8 @@ void function
     case
       2
     :
-      path_s =
+      [ path_s, outputDir_s ] =
         arg_a
-          [0]
-
-      outputDir_s =
-        arg_a
-          [1]
           
       break
 
