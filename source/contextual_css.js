@@ -96,12 +96,12 @@ const GM_re =
 
 const UN_o =
 {
-  INDENTATION_s: '  ',    //: 2 spaces
+  INDENTATION_s: '  ',    //: double space
 
 
 
 
-  write__s:
+  unminify__s:
   (
     css_s
   ) =>
@@ -114,7 +114,7 @@ const UN_o =
             \s*
             {
             \s*
-            `,        //: pattern: ` { `
+            `,       //: pattern: ` { `
           ` {\n${UN_o.INDENTATION_s}`
         )
         .replace
@@ -123,8 +123,18 @@ const UN_o =
           `
           ;
           \s*
-          `,           //: pattern: `; `
+          `,         //: pattern: `; `
           `;\n${UN_o.INDENTATION_s}`
+        )
+        .replace
+        (
+          GM_re
+          `
+          ;
+          \s*
+          \/\*
+          `,         //: pattern: `; `
+          `;${UN_o.INDENTATION_s}/*`
         )
         .replace
         (
@@ -132,7 +142,7 @@ const UN_o =
           `
           ,
           \s*
-          `,           //: pattern: `, `
+          `,         //: pattern: `, `
           `, `
         )
         .replace
@@ -144,6 +154,16 @@ const UN_o =
           \s*
           `,       //: pattern: ` }`
           `}\n`
+        )
+        .replace
+        (
+          GM_re
+          `
+          \*\/
+          \}
+          \n
+        `,         //: pattern: `*/}`
+          `*/\n}`
         )
         .replace
         (
@@ -164,7 +184,7 @@ const UN_o =
           ([^:]+)
           :
           \s*
-          `, //: pattern: `property: `
+          `,         //: pattern: `property: `
           `\n${UN_o.INDENTATION_s}$1: `
         )
         .replace
@@ -175,7 +195,7 @@ const UN_o =
           [A-Za-z0-9\)]
           )
           \}
-          `, //: pattern: `10px)}`
+          `,         //: pattern: `10px)}`
           `$1;\n}`
         )
         .replace
@@ -185,8 +205,8 @@ const UN_o =
           \n
           \s{2}      //: double space indentation
           @
-          `, //: pattern: ` @`  (at-rule)
-          `\n@`                            //: at line start
+          `,         //: pattern: ` @`  (at-rule)
+          `\n@`      //: at line start
         )
     return css_s
   }
@@ -338,7 +358,7 @@ const CSS_o =
     {
       css_s =
         UN_o
-          .write__s( css_s )
+          .unminify__s( css_s )
     }
 
     if

@@ -37,5 +37,5 @@
   color: hsla(var(--hue_color) 50% 94%/1);
 }
 .select > button:focus ~ div {
-  max-height: 100vh;
-  /* can take up all vertical space */}
+  max-height: 100vh;  /* can take up all vertical space */
+}
