@@ -130,16 +130,6 @@ const UN_o =
         (
           GM_re
           `
-          ;
-          \s*
-          \/\*
-          `,         //: pattern: `; `
-          `;${UN_o.INDENTATION_s}/*`
-        )
-        .replace
-        (
-          GM_re
-          `
           ,
           \s*
           `,         //: pattern: `, `
@@ -149,11 +139,21 @@ const UN_o =
         (
           GM_re
           `
-          [ ]*  
+          [ ]*
           \}
           \s*
           `,       //: pattern: ` }`
           `}\n`
+        )
+        .replace
+        (
+          GM_re
+          `
+          ;
+          \s*
+          \/\*
+          `,         //: pattern: ` /*`
+          `;${UN_o.INDENTATION_s}/*`
         )
         .replace
         (
@@ -1656,7 +1656,7 @@ void function
 {
   const help_s =
     `Valid arguments:
-    \t(1) [optional] input file path (default: html.context.html),
+    \t(1) [optional] input file path (default: html.context.html)
     \t(2) [optional] output directory path (default: ./)
     \t(3) [optional] --s (stdout output)
     \t(4) [optional] --u (unminify output)

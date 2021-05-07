@@ -11,11 +11,13 @@ A Node JS script to generate semantic HTML driven modular stylesheets:
 ```bash
 cd path/to/tutorial/directory
 tutorial $ node ../../source/contextual_css.js --h
-Valid arguments:
-        (1) [optional] input file path (default: html.context.html),
-        (2) [optional] output directory path (default: ./)
-        (3) [optional] --s (output to stdout)
-        (4) [optional] --v (verbose)
+  Valid arguments:
+    (1) [optional] input file path (default: html.context.html)
+    (2) [optional] output directory path (default: ./)
+    (3) [optional] --s (stdout output)
+    (4) [optional] --u (unminify output)
+    (5) [optional] --v (verbose)
+    (5) [optional] --h (help)
 ```
 
 
@@ -50,7 +52,8 @@ Therefore tags can not only be pure tags but also tags with selectors:
   <a>
         display: none;
   </a>
-  <a:target><!-- variant -->
+  <!-- variant -->
+  <a:target>
         display: grid;
         justify-items: center;
   </a>
@@ -66,6 +69,89 @@ Most usual kinds of CSS selectors can be added to any tag: they have to follow t
 ```
 
 __Important__: **Self-closing tags have to be closed!**
+
+
+### Block tag
+
+A special `<block>` tag can be used to group common declarations shared by more than one ruleset.<br>
+An _identifier_ have to be set, after the tag name. Each time the common block has to be inserted in a declaration block, the `context( block, _identifier_ )` is used.
+```html
+<block centered>
+        display: grid;
+        justify-items: center;
+<block>
+```
+Somewhere else, after the previous block:
+```css
+<div>
+  context( block, centered )
+</div>
+```
+
+It can be useful to declare all blocks in a specific file, loaded from the Context-CSS root file or inside it, at the begining, to be able to use the blocks inside any other file.
+
+
+## At-rules
+
+Almost all currently defined CSS at-rules can be declared anywhere inside a Context-CSS: `@import`, `@media`, `@supports`, etc.
+The declaration of these at-rules are "standardised" according to the pattern:
++ @_rule-name_
++ parameter or condition
++ _blank line_ (ending parameter or condition declaration)
++ rule
+
+Nested at-rules are not supported!
+
+```html
+@import
+print
+
+url( 'fineprint.css' )
+@
+
+```
+Output:
+```css
+@import url( 'fineprint.css' ) print;
+```
+
+```html
+@media
+screen
+and (max-width: 900px)
+and (min-height: 500px)
+
+context( stack, keep )
+<ol>
+        --col_count: 2;
+  <li>
+          color: red;
+  </li>
+</ol>
+@
+```
+Output:
+```css
+@media screen and (max-width: 900px) and (min-height: 500px) {
+  ol {
+  --col_count: 2;
+}
+ol > li {
+  color: red;
+}
+}
+```
+List of supported at-rules:
++ @charset
++ @viewport 
++ @font-face
++ @import
++ @namespace
++ @counter-style
++ @property
++ @keyframes
++ @media
++ @supports
 
 
 ## Descendant selectors
@@ -108,6 +194,17 @@ To specify a general or adjacent sibling relation between to consecutive tags at
 
 There is only one processing function (at the moment) to organize the output of a **Contextual-CSS** file, whose name is: `context`!<br/>
 It takes two arguments: a __name__ and a __parameter__.
+
+
+### **comment**
+<hr/>
+
+
+#### `context( comment )`
+
+All HTML comments (relative to tags: `<!-- comment -->`) are automatically removed from the generated `.css` file.
+
+By default, all CSS comments (relative to declarations: `/* comment */`) are also removed, unless a context-comment directive has been set (and not commented out by an HTML comment), usually at the begining of the file.
 
 
 ### **url**
@@ -157,25 +254,13 @@ It can be used for different tags with identical declarations (for instance in a
 The parameter `next` is optional.
 
 
-### **minify**
+### **block**
 <hr/>
 
 
-#### `context( minify, boolean )`
+#### `context( block, identifier )`
 
-All following rulesets will be minified if `boolean` is `true` (or `TRUE`) and<br/>
-not minified if it's `false` (or `FALSE`).
-
-
-### **comment**
-<hr/>
-
-
-#### `context( comment )`
-
-All HTML comments (relative to tags: `<!-- comment -->`) are automatically removed from the generated `.css` file.
-
-By default, all CSS comments (relative to declarations: `/* comment */`) are also removed, unless a context-comment directive has been set (and not commented out by an HTML comment), usually at the begining of the file.
+Nesting this function in any tag will insert all declarations found in a `<block>` tag with the same identifier.
 
 
 ## Classes
@@ -197,7 +282,8 @@ Note that it is mandatory to put the same attribute/value pair in the closing ta
 By convention, the **Contextual-CSS** file has a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar). After processing, this extension is replaced by the usual `.css` one.<br/>
 In the tutorial, the name of each file is the root tag of the file.
 
-As to improve code reading, an 8-spaces indentation between the opening tag and its declarations is used.
+As to improve code reading, an 8-spaces indentation between the opening tag and its declarations is used.<br>
+CSS output files are **minified by default**. Unminifying is done using the `--u` argument when invoquing the script.
 
 
 ## Examples

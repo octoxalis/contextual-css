@@ -7,8 +7,7 @@ context( stack, new )
   <main>
     context( stack, new )
     <p class="paragraph">
-            display: grid;
-            justify-items: center;
+            context( block, centered )  /* block directive */
             margin: 2em 0;
             color: hsla(calc(var(--hue_color) - 50) 50% 94%/1);  /* TODO: 50 as a var */
       <i>
@@ -23,9 +22,8 @@ context( stack, new )
       </a>
       <!-- variant -->
       <a:target>
+              context( block, centered )  /* block directive */
               max-width: 50%;
-              display: grid;
-              justify-items: center;
               margin: 25vh auto;
               padding: 1rem;
               color: hsla(var(--hue_color) 50% 94%/1);

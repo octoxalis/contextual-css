@@ -18,9 +18,9 @@ aside > a {
   display: none;
 }
 aside > a:target {
-  max-width: 50%;
   display: grid;
   justify-items: center;
+  max-width: 50%;
   margin: 25vh auto;
   padding: 1rem;
   color: hsla(var(--hue_color) 50% 94%/1);

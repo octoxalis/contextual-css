@@ -188,11 +188,6 @@ font-size: 125%;
 }
 ```
 
-Have also a look at the `footer.context.html` output (`footer.css`) to see the result of line 1 directive:
-```
-context( minify, true )
-```
-
 ## Tutorial page
 
 ![Tutorial index.html file](../../screenshots/tutorial.jpg)
