@@ -100,6 +100,8 @@ The declaration of these at-rules are "standardised" according to the pattern:
 + _blank line_ (ending parameter or condition declaration)
 + rule
 
+When an at-rule has no parameter or condition (e.g. @charset, @viewport, @font-face) any character (or word) have to be used to fulfill the declaration pattern.
+
 Nested at-rules are not supported!
 
 ```html
