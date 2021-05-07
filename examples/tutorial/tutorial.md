@@ -30,24 +30,27 @@ context( comment )
         text-decoration: none;
       </a>
     </label>
-    <!-- variant --><input/>
-                    +
-                    <label:hover>
-                            filter: brightness(1.5);
-                    </label>
-    <!-- variant --><input:checked/>
-                    +
-                    <label>
-                            background: hsla(var(--hue_color) 50% 6%/1);
-                            color: hsla(var(--hue_color) 50% 94%/1);
-                    </label>
+    <!-- variant -->
+    <input/>
+    +
+    <label:hover>
+            filter: brightness(1.5);
+    </label>
+    <!-- variant -->
+    <input:checked/>
+    +
+    <label>
+            background: hsla(var(--hue_color) 50% 6%/1);
+            color: hsla(var(--hue_color) 50% 94%/1);
+    </label>
   </div>
-  <!-- variant --><button:focus>
-                  </button>
-                  ~
-                  <div>
-                          max-height: 100vh;    /* can take up all vertical space */
-                  </div>
+  <!-- variant -->
+  <button:focus>
+  </button>
+  ~
+  <div>
+          max-height: 100vh;    /* can take up all vertical space */
+  </div>
 </div class="select"><!-- class closing -->
 ```
 
@@ -114,15 +117,15 @@ For instance, in the `html.context.html` file there is one variant (denoted by a
   <a>
         display: none;
   </a>
-  <!-- variant --><a:target>
-                          max-width: 50%;
-                          display: grid;
-                          justify-items: center;
-                          margin: 25vh auto;
-                          padding: 1rem;
-                          color: hsla(var(--hue_color) 50% 94%/1);
-                          font-size: 125%;
-                  </a>
+  <!-- variant -->
+  <a:target>
+          context( block, centered )  /* block directive */
+          max-width: 50%;
+          margin: 25vh auto;
+          padding: 1rem;
+          color: hsla(var(--hue_color) 50% 94%/1);
+          font-size: 125%;
+  </a>
 </aside>
 ```
 
