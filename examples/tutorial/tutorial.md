@@ -2,56 +2,41 @@
 
 ```html
 context( comment )
-<div class="select">
-        width: fit-content;  width: -moz-fit-content;
-        margin: 0 auto;
-        cursor: pointer;
-  <button>
-          width: 100%;
-          padding: .5em 2em;
-          color: hsla(var(--hue_color) 50% 94%/1);
-          background: hsla(var(--hue_color) 50% 17%/1);
-          border: 2px solid hsla(var(--hue_color) 50% 94%/1);
-  </button>
-  +
-  <div>
-          max-height: 0;
-          overflow: hidden;
-          background: hsla(var(--hue_color) 50% 6%/1);
-          transition: .3s;
-    <input/>
-            display: none;
-    <label>
-            display: block;
-            padding: .5em;
-            background: hsla(var(--hue_color) 50% 61%/1);
+context( stack, new )
+<body>
+        background: hsla(var(--hue_color) 50% 28%/1);
+        font-family: Cantarell Regular, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, sans-serif;
+        font-size: 16px;
+        font-weight: 300;
+  <main>
+    context( stack, new )
+    <p class="paragraph">
+            context( block, centered )  /* block directive */
+            margin: 2em 0;
+            color: hsla(calc(var(--hue_color) - 50) 50% 94%/1);  /* TODO: 50 as a var */
+      <i>
+              font-style: normal;
+              font-size: 150%;
+      </i>
+    </p class="paragraph"><!-- class closing -->
+    context( url, select.context.html )
+    <aside>
       <a>
-        color: hsla(var(--hue_color) 50% 94%/1);
-        text-decoration: none;
+            display: none;
       </a>
-    </label>
-    <!-- variant -->
-    <input/>
-    +
-    <label:hover>
-            filter: brightness(1.5);
-    </label>
-    <!-- variant -->
-    <input:checked/>
-    +
-    <label>
-            background: hsla(var(--hue_color) 50% 6%/1);
-            color: hsla(var(--hue_color) 50% 94%/1);
-    </label>
-  </div>
-  <!-- variant -->
-  <button:focus>
-  </button>
-  ~
-  <div>
-          max-height: 100vh;    /* can take up all vertical space */
-  </div>
-</div class="select"><!-- class closing -->
+      <!-- variant -->
+      <a:target>
+              context( block, centered )  /* block directive */
+              max-width: 50%;
+              margin: 25vh auto;
+              padding: 1rem;
+              color: hsla(var(--hue_color) 50% 94%/1);
+              font-size: 125%;
+      </a>
+    </aside>
+    context( url, footer.context.html )
+  </main>
+</body>
 ```
 
 This is the code of the main **Contextual-CSS** file used to generate this tutorial demo page modular stylesheets.
@@ -86,7 +71,7 @@ This directive is a way to control the nesting level of CSS selectors.
 
 ## Class definition
 
-Line 12 shows a convenient way to generate a class selector:
+Line 10 shows a convenient way to generate a class selector:
 ```html
 <p class="paragraph">
 ```
@@ -99,7 +84,7 @@ is used to close the `paragraph` class tag: it is **mandatory** for the stack pr
 
 
 ## Universal and root selectors
-The `<*>` tag, not defined in the HTML5 standard, is used to emulate the behavior of the universal CSS selector. It can be nested inside any tag (see line 5).
+The `<*>` tag, not defined in the HTML5 standard, is used to emulate the behavior of the universal CSS selector. It can be nested inside any tag (see line 15 in `html.context.html` file).
 
 In the same way, the root selector tag can be set as a `<:root></:root>` pair. However it's better to put all root statements insi the html tag.
 
@@ -110,7 +95,7 @@ In the same way, the root selector tag can be set as a `<:root></:root>` pair. H
 ## HTML structure
 
 **Contextual-CSS** is driven by the HTML structure of a page (or fragment). But a single HTML block can't express all the possible states of the contained tags. Therefore, it is sometimes necessary to duplicate a block to insert variations of the basic ruleset declarations.<br/>
-For instance, in the `html.context.html` file there is one variant (denoted by an HTML comment) of the basic `<a>` block:
+For instance, in the `body.context.html` file, line 25, there is one variant (denoted by an HTML comment) of the basic `<a>` block:
 
 ```html
 <aside>
@@ -136,7 +121,7 @@ Here the basic tag has only one declaration and the targeted tag has more declar
 
 ## Modular stylesheets
 
-Organizing stylesheets in a modular way is always a good practice: this is the purpose of the `url` context functions on lines 22 and 37
+Organizing stylesheets in a modular way is always a good practice: this is the purpose of the `url` context functions on lines 19 and 34
 ```
 context( url, select.context.html )
 ```
@@ -147,47 +132,33 @@ The stylesheet module generated imports the processing stack of its caller, but 
 ## Output
 
 ```css
-html {
---hue_color: 210;
-}
-
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-}
-
 body {
-background: hsla(var(--hue_color) 50% 28%/1);
-font-family: Cantarell Regular, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, sans-serif;
-font-size: 16px;
-font-weight: 300;
+  background: hsla(var(--hue_color) 50% 28%/1);
+  font-family: Cantarell Regular, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Helvetica Neue, sans-serif;
+  font-size: 16px;
+  font-weight: 300;
 }
-
 .paragraph {
-display: grid;
-justify-items: center;
-margin: 2em 0;
-color: hsla(calc(var(--hue_color) - 50) 50% 94%/1);
+  display: grid;
+  justify-items: center;
+  margin: 2em 0;
+  color: hsla(calc(var(--hue_color) - 50) 50% 94%/1);
 }
-
 .paragraph > i {
-font-style: normal;
-font-size: 150%;
+  font-style: normal;
+  font-size: 150%;
 }
-
 aside > a {
-display: none;
+  display: none;
 }
-
 aside > a:target {
-max-width: 50%;
-display: grid;
-justify-items: center;
-margin: 25vh auto;
-padding: 1rem;
-color: hsla(var(--hue_color) 50% 94%/1);
-font-size: 125%;
+  display: grid;
+  justify-items: center;
+  max-width: 50%;
+  margin: 25vh auto;
+  padding: 1rem;
+  color: hsla(var(--hue_color) 50% 94%/1);
+  font-size: 125%;
 }
 ```
 
@@ -195,7 +166,7 @@ font-size: 125%;
 
 ![Tutorial index.html file](../../screenshots/tutorial.jpg)
 
-The `html.context.html` file has generated three stylesheets for the purpose of this tutorial page, but, in a real application, they would be merged in a single CSS file for performance concerns.<br/>
+The `html.context.html` file has generated four stylesheets for the purpose of this tutorial page, but, in a real application, they would be merged in a single CSS file for performance concerns.<br/>
 As you will discover loading that page in a browser, the **Contextual-CSS** generated code is not a simple decoration of the elements of the page but, without a single line of JavaScript, it shows or hides elements: have a look at the `select.context.html` file and its generated CSS file: HTML and CSS are awesome!
 
 And JavaScript too, because `contextual_css.js` is a Node JS script.
