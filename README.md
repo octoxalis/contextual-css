@@ -297,10 +297,10 @@ However, sometimes defining classes can be helpful and it can been done the foll
 ```html
 <section class="example">
         color: blue;
-</section class="example">
+</section>
 ```
 
-Note that it is mandatory to put the same attribute/value pair in the closing tag: __Contextual-CSS is not, and doesn't have to be, a valid HTML file__.
+Note that sometimes it can be necessary to repeat the attribute/value pair in the closing tag: __Contextual-CSS is not, and doesn't have to be, a valid HTML file__.
 
 
 ## File format
