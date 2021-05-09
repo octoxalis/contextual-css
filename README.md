@@ -71,6 +71,30 @@ Most usual kinds of CSS selectors can be added to any tag: they have to follow t
 __Important__: **Self-closing tags have to be closed!**
 
 
+### No tag selectors
+
+A universal selector (`*`) has no tag. Therefore, it can be simply set by a `<*>` and `</*>` pseudo-tag:
+```html
+<*>
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+</*>
+```
+This mechanism is extended to any pseudo-tag with a conditional selector, for instance:
+```html
+  <.simpleClass>
+          top: 0;
+  </.simpleClass>
+  <:is(div, section) :is(em, i)>
+          color: red;
+  </:is>
+```
+
+In the second case, the closing pseudo-tag is shortened to its simplest form.<br>
+__Of course it is valid if this `:is()` selector only pseudo-tag is placed at the root level (`html` tag) or after a `context( stack, ignore )` directive__.
+
+
 ### Block tag
 
 A special `<block>` tag can be used to group common declarations shared by more than one ruleset.<br>
