@@ -1,7 +1,7 @@
 # Tutorial
 
 ```html
-context( comment )
+<!-- context( comment ) -->
 context( stack, new )
 <body>
         background: hsla(var(--hue_color) 50% 28%/1);
@@ -80,21 +80,21 @@ It is important to note that a
 ```html
 </p class="paragraph">
 ```
-is used to close the `paragraph` class tag: it is **mandatory** for the stack processing. The `<!-- class closing -->` comment is there to remind it.
+is used to close the `paragraph` class tag. However, most of the time, it is not **mandatory** for the stack processing.
 
 
 ## Universal and root selectors
 The `<*>` tag, not defined in the HTML5 standard, is used to emulate the behavior of the universal CSS selector. It can be nested inside any tag (see line 15 in `html.context.html` file).
 
-In the same way, the root selector tag can be set as a `<:root></:root>` pair. However it's better to put all root statements insi the html tag.
+In the same way, the root selector tag can be set as a `<:root></:root>` pair.
 
 
-**This universal selector-tag should be avoid as much as possible because it goes against the direct parent-child relationship between the elements of the HTML structure enforced by Contextual-CSS**.
+**This universal selector-tag should be avoid as much as possible because it goes against the direct parent-child relationship between the elements of the HTML structure enforced by Contextual-CSS. It's much better to put all root statements inside the `html` tag.**.
 
 
 ## HTML structure
 
-**Contextual-CSS** is driven by the HTML structure of a page (or fragment). But a single HTML block can't express all the possible states of the contained tags. Therefore, it is sometimes necessary to duplicate a block to insert variations of the basic ruleset declarations.<br/>
+**Contextual-CSS** is driven by the HTML structure of a page (or fragment). But a single HTML block can't express all contained tags possible states. Therefore, it is sometimes necessary to duplicate a block to insert variations of the basic ruleset declarations.<br/>
 For instance, in the `body.context.html` file, line 25, there is one variant (denoted by an HTML comment) of the basic `<a>` block:
 
 ```html
@@ -114,9 +114,9 @@ For instance, in the `body.context.html` file, line 25, there is one variant (de
 </aside>
 ```
 
-In the HTML demo page, there is only one link inside the `<aside>` block, but to differentiate the selectors according to the `:target` state, the link tag `<a>` has to be replicated.<br/>
+In the demo page, there is only one link inside the `<aside>` block, but to differentiate the selectors according to the `:target` state, the link tag `<a>` has to be replicated.<br/>
 Of course, it is not necessary to repeat all the declarations shared by these variants and the basic block (indentation is used to make them outstanding).<br/>
-Here the basic tag has only one declaration and the targeted tag has more declarations. But, apart the common `display` property, all other declarations could be moved to the basic tag. It is more meaningful to let the `display: none;` declaration in the basic tag to emphasize that it is not initially visible (see lower the _Hint_ question).
+Here the basic tag has only one declaration and the targeted tag has more declarations. But, apart the common `display` property (inserted by the `context` block directive), all other declarations could be moved to the basic tag. It is more meaningful to let the `display: none;` declaration in the basic tag to emphasize that it is not initially visible.
 
 
 ## Modular stylesheets
@@ -164,13 +164,7 @@ aside > a:target {
 
 ## Tutorial page
 
-![Tutorial index.html file](../../screenshots/tutorial.jpg)
-
 The `html.context.html` file has generated four stylesheets for the purpose of this tutorial page, but, in a real application, they would be merged in a single CSS file for performance concerns.<br/>
 As you will discover loading that page in a browser, the **Contextual-CSS** generated code is not a simple decoration of the elements of the page but, without a single line of JavaScript, it shows or hides elements: have a look at the `select.context.html` file and its generated CSS file: HTML and CSS are awesome!
 
 And JavaScript too, because `contextual_css.js` is a Node JS script.
-
-**NB**: I hope that my _vertical coding style_ won't prevent you to review it: your comments are most welcome.
-
-**Hint**: the three selecting options of the demo page trigger different behaviours. Have you found why?

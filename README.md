@@ -36,14 +36,14 @@ tutorial $ node ../../source/contextual_css.js --h
 
 There are many, many ways to structure Cascadind stylesheets, but the most obvious solutions are not always the most practiced.
 
-**Contextual-CSS** is one of these solutions at our fingertips: it simply uses the hierarchical structure of the HTML code to setup the rulesets declarations of the stylesheets to be generated.<br/>
-With the help of a few directives to parameterize the processing (using a `context` function), a single command yied a fully functional set of stylesheets, broken in as many components as required by the HTML structure of the page or fragment.<br/>
+**Contextual-CSS** is one of these solutions at our fingertips: it simply uses the hierarchical structure of the HTML code to setup the rulesets declarations for stylesheets to be generated.<br/>
+With the help of a few directives to parameterize the processing (using a `context` function), a single command yied a fully functional set of stylesheets, broken in as many components as required by the HTML structure of the page or component.<br/>
 Of course, if the HTML code is further modified, the relative **Contextual-CSS** file has to reflect the change.
 
 
 ## Tags and declarations
 
-The skeleton of a **Contextual-CSS** file is a replica of its associated HTML page (or fragment): tags only, that will be filled with CSS declarations.
+The skeleton of a **Contextual-CSS** file is a replica of its associated HTML page (or component): tags only, that will be filled with CSS declarations.
 
 But tags are not enougth to capture all the nuances of a stylesheet that are desired. Some declarations are related to specific states of the DOM nodes and their tags have to reflect this state.<br/>
 Therefore tags can not only be pure tags but also tags with selectors:
@@ -112,7 +112,7 @@ Somewhere else, after the previous block:
 </div>
 ```
 
-It can be useful to declare all blocks in a specific file, loaded from the Context-CSS root file or inside it, at the begining, to be able to use the blocks inside any other file.
+It can be useful to declare all blocks in a specific file, loaded from the Context-CSS root file or inside that one, at the begining, to be able to use the declared blocks inside any other file.
 
 
 ## At-rules
@@ -181,7 +181,7 @@ List of supported at-rules:
 
 
 ## Descendant selectors
-By default, the HTML nesting hierarchy is replicated using the immediate descendant selector: `>`
+By default, the HTML nesting hierarchy is replicated using the immediate descendant selector: `>`.
 ```html
 <ul>
         display: flex;
@@ -240,7 +240,7 @@ By default, all CSS comments (relative to declarations: `/* comment */`) are als
 #### `context( url, relative_url )`
 
 The file named by the parameter `relative_url` will be put on the proceed stack to be processed after the current one.<br/>
-This a useful function to be able to generate modular stylesheets.
+This a useful function to generate modular stylesheets.
 
 
 ### **stack**
@@ -306,9 +306,9 @@ Note that sometimes it can be necessary to repeat the attribute/value pair in th
 ## File format
 
 By convention, the **Contextual-CSS** file has a double extension: `.context.html` (even if the file format is not fully compliant with an HTML grammar). After processing, this extension is replaced by the usual `.css` one.<br/>
-In the tutorial, the name of each file is the root tag of the file.
+In the [tutorial][2], the name of each file is the root tag of the file.
 
-As to improve code reading, an 8-spaces indentation between the opening tag and its declarations is used.<br>
+To improve code reading, an 8-spaces indentation between the opening tag and its declarations is used.<br>
 CSS output files are **minified by default**. Unminifying is done using the `--u` argument when invoquing the script.
 
 
