@@ -103,7 +103,7 @@ An _identifier_ have to be set, after the tag name. Each time the common block h
 <block centered>
         display: grid;
         justify-items: center;
-<block>
+</block>
 ```
 Somewhere else, after the previous block:
 ```css
